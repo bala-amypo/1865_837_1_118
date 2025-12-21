@@ -24,6 +24,14 @@ public class SupplierRiskAlert {
     @PrePersist
     public void prePersist() {
         this.alertDate = LocalDateTime.now();
-        if (this.resolved == null) this.resolved = Boolean.FALSE;
+        if (this.resolved == null) this.resolved = false;
+    }
+
+    // 👇 Custom constructor used in SupplierRiskAlertServiceImpl
+    public SupplierRiskAlert(Long supplierId, String alertLevel, String message) {
+        this.supplierId = supplierId;
+        this.alertLevel = alertLevel;
+        this.message = message;
+        this.resolved = false;
     }
 }

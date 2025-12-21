@@ -28,4 +28,13 @@ public class DelayScoreRecord {
     public void prePersist() {
         this.computedAt = LocalDateTime.now();
     }
+
+    // 👇 Custom constructor used in DelayScoreServiceImpl
+    public DelayScoreRecord(Long supplierId, Long poId, Integer delayDays, String delaySeverity, Double score) {
+        this.supplierId = supplierId;
+        this.poId = poId;
+        this.delayDays = delayDays;
+        this.delaySeverity = delaySeverity;
+        this.score = score;
+    }
 }
