@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.service.DeliveryRecordService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,18 +10,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveries")
+@RequiredArgsConstructor
 public class DeliveryRecordController {
 
     private final DeliveryRecordService deliveryRecordService;
 
-    public DeliveryRecordController(DeliveryRecordService deliveryRecordService) {
-        this.deliveryRecordService = deliveryRecordService;
-    }
-
     @PostMapping
     public ResponseEntity<DeliveryRecord> record(@RequestBody DeliveryRecord delivery) {
-        DeliveryRecord saved = deliveryRecordService.recordDelivery(delivery);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(deliveryRecordService.recordDelivery(delivery));
     }
 
     @GetMapping("/po/{poId}")

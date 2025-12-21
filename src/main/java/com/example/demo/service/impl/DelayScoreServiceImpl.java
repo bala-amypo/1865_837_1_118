@@ -13,6 +13,7 @@ import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
 import com.example.demo.service.SupplierRiskAlertService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository delayScoreRecordRepository;
@@ -27,18 +29,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierProfileRepository;
     private final SupplierRiskAlertService riskAlertService;
-
-    public DelayScoreServiceImpl(DelayScoreRecordRepository delayScoreRecordRepository,
-                                 PurchaseOrderRecordRepository poRepository,
-                                 DeliveryRecordRepository deliveryRepository,
-                                 SupplierProfileRepository supplierProfileRepository,
-                                 SupplierRiskAlertService riskAlertService) {
-        this.delayScoreRecordRepository = delayScoreRecordRepository;
-        this.poRepository = poRepository;
-        this.deliveryRepository = deliveryRepository;
-        this.supplierProfileRepository = supplierProfileRepository;
-        this.riskAlertService = riskAlertService;
-    }
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
@@ -48,7 +38,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
 
-        if (supplier.getActive() == null || !supplier.getActive()) {
+        if (!supplier.getActive()) {
             throw new BadRequestException("Inactive supplier");
         }
 
@@ -88,8 +78,13 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         DelayScoreRecord saved = delayScoreRecordRepository.save(record);
 
         if ("SEVERE".equals(severity)) {
-            SupplierRiskAlert alert = new SupplierRiskAlert(supplier.getId(), "HIGH",
-                    "Severe delay detected for PO " + po.getPoNumber() + " (" + delayDays + " days)");
+            SupplierRiskAlert alert = new SupplierRiskAlert(
+                    supplier.getId(),
+                    "HIGH",
+                    "Severe delay detected for PO " + po.getPoNumber() + " (" + delayDays + " days)",
+                    null,
+                    false
+            );
             riskAlertService.createAlert(alert);
         }
 

@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.service.PurchaseOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,18 +10,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/purchase-orders")
+@RequiredArgsConstructor
 public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseOrderService;
 
-    public PurchaseOrderController(PurchaseOrderService purchaseOrderService) {
-        this.purchaseOrderService = purchaseOrderService;
-    }
-
     @PostMapping
     public ResponseEntity<PurchaseOrderRecord> create(@RequestBody PurchaseOrderRecord po) {
-        PurchaseOrderRecord created = purchaseOrderService.createPurchaseOrder(po);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(purchaseOrderService.createPurchaseOrder(po));
     }
 
     @GetMapping("/{id}")
