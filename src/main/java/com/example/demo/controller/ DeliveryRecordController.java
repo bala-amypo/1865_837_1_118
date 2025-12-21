@@ -1,37 +1,35 @@
 package com.example.demo.controller;
+
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.service.DeliveryRecordService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveries")
-@RequiredArgsConstructor
 public class DeliveryRecordController {
-    private final DeliveryRecordService deliveryService;
+
+    private final DeliveryRecordService deliveryRecordService;
+
+    public DeliveryRecordController(DeliveryRecordService deliveryRecordService) {
+        this.deliveryRecordService = deliveryRecordService;
+    }
 
     @PostMapping
-    public ResponseEntity<DeliveryRecord> recordDelivery(@Valid @RequestBody DeliveryRecord delivery) {
-        return ResponseEntity.ok(deliveryService.recordDelivery(delivery));
+    public ResponseEntity<DeliveryRecord> record(@RequestBody DeliveryRecord delivery) {
+        DeliveryRecord saved = deliveryRecordService.recordDelivery(delivery);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/po/{poId}")
-    public ResponseEntity<List<DeliveryRecord>> getDeliveriesByPO(@PathVariable Long poId) {
-        return ResponseEntity.ok(deliveryService.getDeliveriesByPO(poId));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<DeliveryRecord> getDeliveryById(@PathVariable Long id) {
-        return deliveryService.getDeliveryById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<DeliveryRecord>> getByPo(@PathVariable Long poId) {
+        return ResponseEntity.ok(deliveryRecordService.getDeliveriesByPO(poId));
     }
 
     @GetMapping
-    public ResponseEntity<List<DeliveryRecord>> getAllDeliveries() {
-        return ResponseEntity.ok(deliveryService.getAllDeliveries());
+    public ResponseEntity<List<DeliveryRecord>> getAll() {
+        return ResponseEntity.ok(deliveryRecordService.getAllDeliveries());
     }
 }
