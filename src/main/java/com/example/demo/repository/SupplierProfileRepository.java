@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SupplierProfileRepository extends JpaRepository<SupplierProfile, Long> {
-    Optional<SupplierProfile> findBySupplierCode(String code); [cite_start]// [cite: 325]
+    Optional<SupplierProfile> findBySupplierCode(String code);
 }
