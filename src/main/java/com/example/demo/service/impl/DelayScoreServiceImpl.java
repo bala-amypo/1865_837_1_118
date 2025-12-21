@@ -81,9 +81,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             SupplierRiskAlert alert = new SupplierRiskAlert(
                     supplier.getId(),
                     "HIGH",
-                    "Severe delay detected for PO " + po.getPoNumber() + " (" + delayDays + " days)",
-                    null,
-                    false
+                    "Severe delay detected for PO " + po.getPoNumber() + " (" + delayDays + " days)"
             );
             riskAlertService.createAlert(alert);
         }
