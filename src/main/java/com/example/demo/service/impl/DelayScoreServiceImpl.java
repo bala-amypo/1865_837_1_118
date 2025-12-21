@@ -1,5 +1,4 @@
 package com.example.demo.service.impl;
-
 import com.example.demo.model.*;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -9,7 +8,6 @@ import com.example.demo.service.SupplierRiskAlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +15,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class DelayScoreServiceImpl implements DelayScoreService {
-
     private final DelayScoreRecordRepository delayScoreRepository;
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
@@ -29,7 +26,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     public DelayScoreRecord computeDelayScore(Long poId) {
         PurchaseOrderRecord po = poRepository.findById(poId)
                 .orElseThrow(() -> new ResourceNotFoundException("PO not found"));
-
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
 
@@ -42,7 +38,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new BadRequestException("No deliveries");
         }
 
-        // Logic using latest delivery
         DeliveryRecord latestDelivery = deliveries.get(deliveries.size() - 1);
         long delayDays = ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), latestDelivery.getActualDeliveryDate());
 
@@ -71,10 +66,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         record.setScore(score);
         
         DelayScoreRecord saved = delayScoreRepository.save(record);
-        
-        // Trigger Risk Alert Check
         checkAndCreateAlert(supplier.getId());
-        
         return saved;
     }
     
@@ -83,9 +75,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         if (scores.isEmpty()) return;
 
         double avgScore = scores.stream().mapToDouble(DelayScoreRecord::getScore).average().orElse(0.0);
-        
         String level;
-        
         if (avgScore >= 75) level = "LOW";
         else if (avgScore >= 50) level = "MEDIUM";
         else level = "HIGH";

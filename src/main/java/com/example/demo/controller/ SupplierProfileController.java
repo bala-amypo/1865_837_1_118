@@ -1,19 +1,16 @@
 package com.example.demo.controller;
-
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.service.SupplierProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
 public class SupplierProfileController {
-
     private final SupplierProfileService supplierService;
 
     @PostMapping
