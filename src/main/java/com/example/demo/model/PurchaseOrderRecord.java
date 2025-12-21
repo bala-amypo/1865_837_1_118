@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "purchase_order_records")
 @Data
 @NoArgsConstructor
-[cite_start]public class PurchaseOrderRecord { // [cite: 136]
+public class PurchaseOrderRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,22 +20,22 @@ import java.time.LocalDate;
 
     @NotBlank
     @Column(unique = true, length = 50)
-    private String poNumber; [cite_start]// [cite: 139]
+    private String poNumber;
 
     @NotNull
-    private Long supplierId; [cite_start]// [cite: 143]
+    private Long supplierId;
 
     @NotBlank
     @Column(length = 500)
-    private String itemDescription; [cite_start]// [cite: 148]
+    private String itemDescription;
 
     @NotNull
     @Positive
-    private Integer quantity; [cite_start]// [cite: 152]
+    private Integer quantity;
 
     @NotNull
-    private LocalDate promisedDeliveryDate; [cite_start]// [cite: 155]
+    private LocalDate promisedDeliveryDate;
 
     @NotNull
-    private LocalDate issuedDate; [cite_start]// [cite: 158]
+    private LocalDate issuedDate;
 }

@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "supplier_profiles")
 @Data
 @NoArgsConstructor
-[cite_start]public class SupplierProfile { // [cite: 97]
+public class SupplierProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,20 +19,20 @@ import java.time.LocalDateTime;
 
     @NotBlank
     @Column(unique = true, length = 50)
-    private String supplierCode; [cite_start]// [cite: 100-104]
+    private String supplierCode;
 
     @NotBlank
     @Column(length = 200)
-    private String supplierName; [cite_start]// [cite: 107-110]
+    private String supplierName;
 
     @Email
     @Column(length = 100)
-    private String email; [cite_start]// [cite: 111-114]
+    private String email;
 
     @Column(length = 20)
-    private String phone; [cite_start]// [cite: 115-117]
+    private String phone;
 
-    private Boolean active = true; [cite_start]// [cite: 120-121]
+    private Boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
