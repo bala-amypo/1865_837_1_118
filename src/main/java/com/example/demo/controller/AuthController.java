@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import org.springframework.http.ResponseEntity;
@@ -22,36 +19,29 @@ public class AuthController {
 
     // ---------------- REGISTER ----------------
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
-        Optional<AppUser> existing = appUserRepository.findByEmail(request.getEmail());
+    public ResponseEntity<AppUser> register(@RequestBody AppUser user) {
+        Optional<AppUser> existing = appUserRepository.findByEmail(user.getEmail());
         if (existing.isPresent()) {
-            return ResponseEntity.badRequest()
-                    .body(new ApiResponse(false, "Email already registered", null));
+            return ResponseEntity.badRequest().build();
         }
-
-        // For now, store raw password (no hashing since you said no security)
-        AppUser user = new AppUser(request.getEmail(), request.getPassword(), request.getRole());
         AppUser saved = appUserRepository.save(user);
-
-        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", saved));
+        return ResponseEntity.ok(saved);
     }
 
     // ---------------- LOGIN ----------------
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
-        Optional<AppUser> userOpt = appUserRepository.findByEmail(request.getEmail());
+    public ResponseEntity<String> login(@RequestBody AppUser loginRequest) {
+        Optional<AppUser> userOpt = appUserRepository.findByEmail(loginRequest.getEmail());
         if (userOpt.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(new ApiResponse(false, "Invalid credentials", null));
+            return ResponseEntity.badRequest().body("Invalid credentials");
         }
 
         AppUser user = userOpt.get();
-        if (!user.getPassword().equals(request.getPassword())) {
-            return ResponseEntity.badRequest()
-                    .body(new ApiResponse(false, "Invalid credentials", null));
+        if (!user.getPassword().equals(loginRequest.getPassword())) {
+            return ResponseEntity.badRequest().body("Invalid credentials");
         }
 
-        // Instead of JWT, just return a success message
-        return ResponseEntity.ok(new ApiResponse(true, "Login successful", user));
+        // No JWT, just return a success message
+        return ResponseEntity.ok("Login successful for user: " + user.getEmail());
     }
 }
