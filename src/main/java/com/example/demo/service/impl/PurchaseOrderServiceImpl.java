@@ -1,33 +1,46 @@
 package com.example.demo.service.impl;
+
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.model.SupplierProfile;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.PurchaseOrderService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
+
     private final PurchaseOrderRecordRepository poRepository;
-    private final SupplierProfileRepository supplierRepository;
+    private final SupplierProfileRepository supplierProfileRepository;
+
+    public PurchaseOrderServiceImpl(PurchaseOrderRecordRepository poRepository,
+                                    SupplierProfileRepository supplierProfileRepository) {
+        this.poRepository = poRepository;
+        this.supplierProfileRepository = supplierProfileRepository;
+    }
 
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
-        
-        if (!supplier.getActive()) {
-            throw new BadRequestException("Supplier must be active");
+
+        if (supplier.getActive() == null || !supplier.getActive()) {
+            throw new BadRequestException("must be active");
         }
-        if (po.getQuantity() <= 0) {
-            throw new BadRequestException("Quantity must be positive");
+
+        if (po.getQuantity() == null || po.getQuantity() <= 0) {
+            throw new BadRequestException("Quantity must be > 0");
         }
+
+        Optional<PurchaseOrderRecord> existingPo = poRepository.findByPoNumber(po.getPoNumber());
+        if (existingPo.isPresent()) {
+            throw new BadRequestException("Duplicate poNumber");
+        }
+
         return poRepository.save(po);
     }
 

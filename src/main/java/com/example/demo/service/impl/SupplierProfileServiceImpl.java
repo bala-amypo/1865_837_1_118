@@ -1,47 +1,56 @@
 package com.example.demo.service.impl;
-import com.example.demo.model.SupplierProfile;
-import com.example.demo.exception.BadRequestException;
+
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class SupplierProfileServiceImpl implements SupplierProfileService {
-    private final SupplierProfileRepository repository;
 
-    @Override
-    public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if (repository.findBySupplierCode(supplier.getSupplierCode()).isPresent()) {
-            throw new BadRequestException("Supplier code already exists");
-        }
-        return repository.save(supplier);
+    private final SupplierProfileRepository supplierProfileRepository;
+
+    public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
+        this.supplierProfileRepository = supplierProfileRepository;
     }
 
     @Override
-    public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = getSupplierById(id);
-        supplier.setActive(active);
-        return repository.save(supplier);
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        Optional<SupplierProfile> existing = supplierProfileRepository.findBySupplierCode(supplier.getSupplierCode());
+        if (existing.isPresent()) {
+            throw new IllegalArgumentException("Duplicate supplierCode");
+        }
+        if (supplier.getActive() == null) {
+            supplier.setActive(Boolean.TRUE);
+        }
+        return supplierProfileRepository.save(supplier);
     }
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        return repository.findById(id)
+        return supplierProfileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override
-    public Optional<SupplierProfile> getBySupplierCode(String code) {
-        return repository.findBySupplierCode(code);
+    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+        return supplierProfileRepository.findBySupplierCode(supplierCode);
     }
 
     @Override
     public List<SupplierProfile> getAllSuppliers() {
-        return repository.findAll();
+        return supplierProfileRepository.findAll();
+    }
+
+    @Override
+    public SupplierProfile updateSupplierStatus(Long id, boolean active) {
+        SupplierProfile supplier = supplierProfileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+        supplier.setActive(active);
+        return supplierProfileRepository.save(supplier);
     }
 }
