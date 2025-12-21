@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.DelayScoreRecord;
+import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.service.DelayScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/delay-scores")
 @RequiredArgsConstructor
-[cite_start]public class DelayScoreController { // [cite: 672]
+public class DelayScoreController {
 
     private final DelayScoreService delayScoreService;
 

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-[cite_start]public class DelayScoreServiceImpl implements DelayScoreService { // [cite: 556]
+public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository delayScoreRepository;
     private final PurchaseOrderRecordRepository poRepository;
@@ -34,12 +34,12 @@ import java.util.Optional;
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
 
         if (!supplier.getActive()) {
-            throw new BadRequestException("Inactive supplier"); [cite_start]// [cite: 566]
+            throw new BadRequestException("Inactive supplier");
         }
 
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
-            throw new BadRequestException("No deliveries"); [cite_start]// [cite: 567]
+            throw new BadRequestException("No deliveries");
         }
 
         // Logic using latest delivery
@@ -49,7 +49,6 @@ import java.util.Optional;
         String severity;
         double score;
 
-        [cite_start]// [cite: 211-224] Logic for Delay Scoring
         if (delayDays <= 0) {
             severity = "ON_TIME";
             score = 100.0;
@@ -86,7 +85,7 @@ import java.util.Optional;
         double avgScore = scores.stream().mapToDouble(DelayScoreRecord::getScore).average().orElse(0.0);
         
         String level;
-        [cite_start]// [cite: 251-255] Logic for Risk Alert
+        
         if (avgScore >= 75) level = "LOW";
         else if (avgScore >= 50) level = "MEDIUM";
         else level = "HIGH";

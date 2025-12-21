@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.AppUser;
+import com.example.demo.model.AppUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-[cite_start]public class JwtTokenProvider { // [cite: 749]
+public class JwtTokenProvider {
 
     private final Key key;
     private final long validityInMs;
@@ -21,7 +21,7 @@ import java.util.Date;
         this.validityInMs = validityInMs;
     }
 
-    [cite_start]public String generateToken(AppUser user) { // [cite: 762]
+    public String generateToken(AppUser user) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMs);
 
@@ -36,7 +36,7 @@ import java.util.Date;
                 .compact();
     }
 
-    [cite_start]public boolean validateToken(String token) { // [cite: 776]
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;

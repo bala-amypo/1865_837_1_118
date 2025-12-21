@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.SupplierProfile;
+import com.example.demo.model.SupplierProfile;
 import com.example.demo.service.SupplierProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
-[cite_start]public class SupplierProfileController { // [cite: 600]
+public class SupplierProfileController {
 
     private final SupplierProfileService supplierService;
 
