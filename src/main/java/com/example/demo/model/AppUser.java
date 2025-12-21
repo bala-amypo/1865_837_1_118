@@ -1,46 +1,51 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "app_users")
-@Data
-@NoArgsConstructor
+@Table(name = "app_users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email"})
+})
 public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(unique = true, length = 50)
-    private String username;
-
-    @Email
-    @NotBlank
-    @Column(unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @NotBlank
-    private String password;
+    @Column(name = "password", nullable = false)
+    private String password; // BCrypt-hashed
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role", nullable = false)
+    private String role; // ADMIN, ANALYST, MANAGER
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    public AppUser() {
+    }
+
+    public AppUser(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public enum Role {
-        ADMIN, ANALYST, MANAGER
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
