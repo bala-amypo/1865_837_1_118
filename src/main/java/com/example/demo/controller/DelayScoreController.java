@@ -1,18 +1,15 @@
 package com.example.demo.controller;
-
 import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.service.DelayScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/delay-scores")
 @RequiredArgsConstructor
 public class DelayScoreController {
-
     private final DelayScoreService delayScoreService;
 
     @PostMapping("/compute/{poId}")
