@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "app_users")
 @Data
 @NoArgsConstructor
-[cite_start]public class AppUser { // [cite: 281]
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role; [cite_start]// [cite: 298]
+    private Role role;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

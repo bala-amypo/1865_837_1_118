@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -11,25 +11,25 @@ import java.time.LocalDateTime;
 @Table(name = "supplier_risk_alerts")
 @Data
 @NoArgsConstructor
-[cite_start]public class SupplierRiskAlert { // [cite: 242]
+public class SupplierRiskAlert {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private Long supplierId; [cite_start]// [cite: 245]
+    private Long supplierId;
 
-    private String alertLevel; [cite_start]// [cite: 250]
+    private String alertLevel;
 
     @NotBlank
     @Column(length = 500)
-    private String message; [cite_start]// [cite: 256]
+    private String message;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime alertDate;
 
-    private Boolean resolved = false; [cite_start]// [cite: 265]
+    private Boolean resolved = false;
 
     @PrePersist
     protected void onCreate() {

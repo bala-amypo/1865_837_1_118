@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -11,21 +11,21 @@ import java.time.LocalDate;
 @Table(name = "delivery_records")
 @Data
 @NoArgsConstructor
-[cite_start]public class DeliveryRecord { // [cite: 172]
+public class DeliveryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private Long poId; [cite_start]// [cite: 176]
+    private Long poId;
 
     @NotNull
-    private LocalDate actualDeliveryDate; [cite_start]// [cite: 181]
+    private LocalDate actualDeliveryDate;
 
     @NotNull
     @Min(value = 0, message = "Delivered quantity must be >= 0")
-    private Integer deliveredQuantity; [cite_start]// [cite: 183-187]
+    private Integer deliveredQuantity;
 
     @Column(length = 500)
     private String notes;

@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.SupplierProfile;
+import com.example.demo.model.SupplierProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

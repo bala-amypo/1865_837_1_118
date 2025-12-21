@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,22 +9,22 @@ import java.time.LocalDateTime;
 @Table(name = "delay_score_records")
 @Data
 @NoArgsConstructor
-[cite_start]public class DelayScoreRecord { // [cite: 200]
+public class DelayScoreRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long supplierId; [cite_start]// [cite: 203]
+    private Long supplierId;
 
     @Column(unique = true)
-    private Long poId; [cite_start]// [cite: 205]
+    private Long poId;
 
-    private Integer delayDays; [cite_start]// [cite: 207]
+    private Integer delayDays;
     
-    private String delaySeverity; [cite_start]// [cite: 211]
+    private String delaySeverity;
     
-    private Double score; [cite_start]// [cite: 219]
+    private Double score;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime computedAt;
