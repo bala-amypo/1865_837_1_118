@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,13 +10,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AppUserRepository appUserRepository;
-
-    public AuthController(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
-    }
 
     // ---------------- REGISTER ----------------
     @PostMapping("/register")
