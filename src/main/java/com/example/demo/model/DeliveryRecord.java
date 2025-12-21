@@ -1,32 +1,46 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "delivery_records")
-@Data
-@NoArgsConstructor
 public class DeliveryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(name = "po_id", nullable = false)
     private Long poId;
 
-    @NotNull
+    @Column(name = "actual_delivery_date", nullable = false)
     private LocalDate actualDeliveryDate;
 
-    @NotNull
-    @Min(value = 0, message = "Delivered quantity must be >= 0")
+    @Column(name = "delivered_quantity", nullable = false)
     private Integer deliveredQuantity;
 
-    @Column(length = 500)
+    @Column(name = "notes")
     private String notes;
+
+    public DeliveryRecord() {
+    }
+
+    public DeliveryRecord(Long poId, LocalDate actualDeliveryDate, Integer deliveredQuantity, String notes) {
+        this.poId = poId;
+        this.actualDeliveryDate = actualDeliveryDate;
+        this.deliveredQuantity = deliveredQuantity;
+        this.notes = notes;
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public Long getPoId() { return poId; }
+    public void setPoId(Long poId) { this.poId = poId; }
+    public LocalDate getActualDeliveryDate() { return actualDeliveryDate; }
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) { this.actualDeliveryDate = actualDeliveryDate; }
+    public Integer getDeliveredQuantity() { return deliveredQuantity; }
+    public void setDeliveredQuantity(Integer deliveredQuantity) { this.deliveredQuantity = deliveredQuantity; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
