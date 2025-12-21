@@ -3,17 +3,15 @@ package com.example.demo.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponse {
+[cite_start]public class ApiResponse { // [cite: 871]
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
     private String message;
-    private boolean success;
-    private Object data;
-
-    public ApiResponse(String message, boolean success) {
-        this.message = message;
-        this.success = success;
-    }
+    private String path;
 }
