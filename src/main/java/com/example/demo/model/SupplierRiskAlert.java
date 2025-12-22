@@ -26,8 +26,6 @@ public class SupplierRiskAlert {
         this.alertDate = LocalDateTime.now();
         if (this.resolved == null) this.resolved = false;
     }
-
-    // 👇 Custom constructor used in SupplierRiskAlertServiceImpl
     public SupplierRiskAlert(Long supplierId, String alertLevel, String message) {
         this.supplierId = supplierId;
         this.alertLevel = alertLevel;
