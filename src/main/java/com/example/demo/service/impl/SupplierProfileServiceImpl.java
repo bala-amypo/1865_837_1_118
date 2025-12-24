@@ -21,7 +21,7 @@ public class SupplierProfileServiceImpl {
 
     public SupplierProfile createSupplier(SupplierProfile supplier) {
         if (supplier.getActive() == null) supplier.setActive(true);
-        supplierRepo.save(supplier); // ignore return, always return input
+        supplierRepo.save(supplier); // ignore return
         return supplier;
     }
 
