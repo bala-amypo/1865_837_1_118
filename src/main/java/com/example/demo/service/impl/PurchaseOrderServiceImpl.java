@@ -25,7 +25,8 @@ public class PurchaseOrderServiceImpl {
         if (!Boolean.TRUE.equals(supplier.getActive())) {
             throw new BadRequestException("Supplier must be active");
         }
-        return poRepo.save(po);
+        poRepo.save(po);
+        return po;
     }
 
     public List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId) {

@@ -23,7 +23,8 @@ public class DeliveryRecordServiceImpl {
         if (delivery.getDeliveredQuantity() == null || delivery.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Delivered quantity must be >= 0");
         }
-        return deliveryRepo.save(delivery);
+        deliveryRepo.save(delivery);
+        return delivery;
     }
 
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {

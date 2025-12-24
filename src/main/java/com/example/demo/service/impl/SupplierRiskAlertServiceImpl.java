@@ -15,14 +15,16 @@ public class SupplierRiskAlertServiceImpl {
 
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
         alert.setResolved(false);
-        return alertRepo.save(alert);
+        alertRepo.save(alert);
+        return alert;
     }
 
     public SupplierRiskAlert resolveAlert(Long id) {
         SupplierRiskAlert a = alertRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
         a.setResolved(true);
-        return alertRepo.save(a);
+        alertRepo.save(a);
+        return a;
     }
 
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {

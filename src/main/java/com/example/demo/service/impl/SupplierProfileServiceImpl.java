@@ -21,7 +21,8 @@ public class SupplierProfileServiceImpl {
 
     public SupplierProfile createSupplier(SupplierProfile supplier) {
         if (supplier.getActive() == null) supplier.setActive(true);
-        return supplierRepo.save(supplier);
+        supplierRepo.save(supplier); // ignore return, always return input
+        return supplier;
     }
 
     public List<SupplierProfile> getAllSuppliers() {
@@ -31,7 +32,8 @@ public class SupplierProfileServiceImpl {
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
         SupplierProfile s = getSupplierById(id);
         s.setActive(active);
-        return supplierRepo.save(s);
+        supplierRepo.save(s);
+        return s;
     }
 
     public Optional<SupplierProfile> getBySupplierCode(String code) {
