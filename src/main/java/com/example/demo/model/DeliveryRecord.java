@@ -1,29 +1,24 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "delivery_records")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class DeliveryRecord {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "po_id", nullable = false)
     private Long poId;
-
-    @Column(name = "actual_delivery_date", nullable = false)
+    private Integer deliveredQuantity;
     private LocalDate actualDeliveryDate;
 
-    @Column(name = "delivered_quantity", nullable = false)
-    private Integer deliveredQuantity;
+    public DeliveryRecord() {}
 
-    @Column(name = "notes")
-    private String notes;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getPoId() { return poId; }
+    public void setPoId(Long poId) { this.poId = poId; }
+
+    public Integer getDeliveredQuantity() { return deliveredQuantity; }
+    public void setDeliveredQuantity(Integer deliveredQuantity) { this.deliveredQuantity = deliveredQuantity; }
+
+    public LocalDate getActualDeliveryDate() { return actualDeliveryDate; }
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) { this.actualDeliveryDate = actualDeliveryDate; }
 }
