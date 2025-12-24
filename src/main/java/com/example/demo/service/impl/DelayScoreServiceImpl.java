@@ -61,7 +61,7 @@ public class DelayScoreServiceImpl {
             record.setScore(100.0);
         } else if (normalized <= 3) {
             record.setDelaySeverity("MINOR");
-            record.setScore(80.0); // ensure < 100.0
+            record.setScore(80.0);
         } else if (normalized <= 7) {
             record.setDelaySeverity("MODERATE");
             record.setScore(50.0);
@@ -70,7 +70,8 @@ public class DelayScoreServiceImpl {
             record.setScore(0.0);
         }
 
-        return delayRepo.save(record);
+        delayRepo.save(record);
+        return record;
     }
 
     public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
