@@ -1,15 +1,14 @@
-// package com.example.demo.dto;
-// import jakarta.validation.constraints.Email;
-// import jakarta.validation.constraints.NotBlank;
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
+package com.example.demo.dto;
 
-// @Data
-// @NoArgsConstructor
-// public class LoginRequest {
-//     @Email
-//     @NotBlank
-//     private String email;
-//     @NotBlank
-//     private String password;
-// }
+public class LoginRequest {
+    private String username;
+    private String password;
+
+    public LoginRequest() {}
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+}
