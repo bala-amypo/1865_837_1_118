@@ -20,10 +20,13 @@ public class DeliveryRecordServiceImpl {
         this.poRepo = poRepo;
     }
 
+    // ----------------------------
+    // record delivery
+    // ----------------------------
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
         if (delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must be >= 0");
+            throw new BadRequestException("Delivered quantity must be >=");
         }
 
         poRepo.findById(delivery.getPoId())
@@ -32,6 +35,9 @@ public class DeliveryRecordServiceImpl {
         return deliveryRepo.save(delivery);
     }
 
+    // ----------------------------
+    // queries
+    // ----------------------------
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
         return deliveryRepo.findByPoId(poId);
     }
