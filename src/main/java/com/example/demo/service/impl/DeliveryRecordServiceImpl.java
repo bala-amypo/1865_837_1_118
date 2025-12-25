@@ -23,17 +23,17 @@ public class DeliveryRecordServiceImpl {
         this.poRepository = poRepo;
     }
 
-    public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
+ public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
-        if (delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must >=");
-        }
-
-        poRepository.findById(delivery.getPoId())
-                .orElseThrow(() -> new BadRequestException("Invalid PO id"));
-
-        return deliveryRepository.save(delivery);
+    if (delivery.getDeliveredQuantity() < 0) {
+        throw new BadRequestException("Delivered quantity must >=");
     }
+
+    poRepository.findById(delivery.getPoId())
+            .orElseThrow(() -> new BadRequestException("Invalid PO id"));
+
+    return deliveryRepository.save(delivery);
+}
 
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
         return deliveryRepository.findByPoId(poId);
