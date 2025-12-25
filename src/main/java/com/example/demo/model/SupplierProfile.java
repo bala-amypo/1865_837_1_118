@@ -7,8 +7,6 @@ public class SupplierProfile {
     private String email;
     private Boolean active = true;
 
-    public SupplierProfile() {}
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
