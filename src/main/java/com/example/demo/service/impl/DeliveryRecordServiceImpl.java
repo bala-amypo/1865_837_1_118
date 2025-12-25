@@ -10,43 +10,40 @@ import java.util.Optional;
 
 public class DeliveryRecordServiceImpl {
 
-    private final DeliveryRecordRepository deliveryRepo;
-    private final PurchaseOrderRecordRepository poRepo;
+    DeliveryRecordRepository deliveryRepository;
+    PurchaseOrderRecordRepository poRepository;
+
+    public DeliveryRecordServiceImpl() {
+    }
 
     public DeliveryRecordServiceImpl(
             DeliveryRecordRepository deliveryRepo,
             PurchaseOrderRecordRepository poRepo) {
-        this.deliveryRepo = deliveryRepo;
-        this.poRepo = poRepo;
+        this.deliveryRepository = deliveryRepo;
+        this.poRepository = poRepo;
     }
 
-    // ----------------------------
-    // record delivery
-    // ----------------------------
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
         if (delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must be >=");
+            throw new BadRequestException("Delivered quantity must >=");
         }
 
-        poRepo.findById(delivery.getPoId())
+        poRepository.findById(delivery.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        return deliveryRepo.save(delivery);
+        return deliveryRepository.save(delivery);
     }
 
-    // ----------------------------
-    // queries
-    // ----------------------------
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return deliveryRepo.findByPoId(poId);
+        return deliveryRepository.findByPoId(poId);
     }
 
     public Optional<DeliveryRecord> getDeliveryById(Long id) {
-        return deliveryRepo.findById(id);
+        return deliveryRepository.findById(id);
     }
 
     public List<DeliveryRecord> getAllDeliveries() {
-        return deliveryRepo.findAll();
+        return deliveryRepository.findAll();
     }
 }

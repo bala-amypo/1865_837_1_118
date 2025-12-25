@@ -9,33 +9,41 @@ import java.util.Optional;
 
 public class SupplierProfileServiceImpl {
 
-    private final SupplierProfileRepository repo;
+    // 🔴 Mockito injects this
+    SupplierProfileRepository supplierProfileRepository;
 
-    public SupplierProfileServiceImpl(SupplierProfileRepository repo) {
-        this.repo = repo;
+    // ✅ REQUIRED no-arg constructor
+    public SupplierProfileServiceImpl() {
     }
 
-    public SupplierProfile createSupplier(SupplierProfile s) {
-        if (s.getActive() == null) s.setActive(true);
-        return repo.save(s);
+    // optional constructor (safe)
+    public SupplierProfileServiceImpl(SupplierProfileRepository repo) {
+        this.supplierProfileRepository = repo;
+    }
+
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        if (supplier.getActive() == null) {
+            supplier.setActive(true);
+        }
+        return supplierProfileRepository.save(supplier);
     }
 
     public SupplierProfile getSupplierById(Long id) {
-        return repo.findById(id)
+        return supplierProfileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     public List<SupplierProfile> getAllSuppliers() {
-        return repo.findAll();
+        return supplierProfileRepository.findAll();
     }
 
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile s = getSupplierById(id);
-        s.setActive(active);
-        return repo.save(s);
+        SupplierProfile supplier = getSupplierById(id);
+        supplier.setActive(active);
+        return supplierProfileRepository.save(supplier);
     }
 
     public Optional<SupplierProfile> getBySupplierCode(String code) {
-        return repo.findBySupplierCode(code);
+        return supplierProfileRepository.findBySupplierCode(code);
     }
 }
