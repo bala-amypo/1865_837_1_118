@@ -8,29 +8,32 @@ import java.util.List;
 
 public class SupplierRiskAlertServiceImpl {
 
-    private final SupplierRiskAlertRepository repo;
+    SupplierRiskAlertRepository riskAlertRepository;
+
+    public SupplierRiskAlertServiceImpl() {
+    }
 
     public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository repo) {
-        this.repo = repo;
+        this.riskAlertRepository = repo;
     }
 
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        alert.setResolved(false); // REQUIRED BY TEST
-        return repo.save(alert);
+        alert.setResolved(false);
+        return riskAlertRepository.save(alert);
     }
 
     public SupplierRiskAlert resolveAlert(Long id) {
-        SupplierRiskAlert alert = repo.findById(id)
+        SupplierRiskAlert alert = riskAlertRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
         alert.setResolved(true);
-        return repo.save(alert);
+        return riskAlertRepository.save(alert);
     }
 
-    public List<SupplierRiskAlert> getAlertsBySupplier(Long id) {
-        return repo.findBySupplierId(id);
+    public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
+        return riskAlertRepository.findBySupplierId(supplierId);
     }
 
     public List<SupplierRiskAlert> getAllAlerts() {
-        return repo.findAll();
+        return riskAlertRepository.findAll();
     }
 }
