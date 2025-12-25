@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class PurchaseOrderServiceImpl {
+
     private final PurchaseOrderRecordRepository poRepo;
     private final SupplierProfileRepository supplierRepo;
 
@@ -20,17 +21,20 @@ public class PurchaseOrderServiceImpl {
     }
 
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
+        SupplierProfile s = supplierRepo.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
-        if (!Boolean.TRUE.equals(supplier.getActive())) {
+
+        if (!s.getActive())
             throw new BadRequestException("Supplier must be active");
-        }
-        poRepo.save(po);
-        return po;
+
+        if (po.getQuantity() <= 0)
+            throw new BadRequestException("Quantity must be positive");
+
+        return poRepo.save(po);
     }
 
-    public List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId) {
-        return poRepo.findBySupplierId(supplierId);
+    public List<PurchaseOrderRecord> getPOsBySupplier(Long id) {
+        return poRepo.findBySupplierId(id);
     }
 
     public Optional<PurchaseOrderRecord> getPOById(Long id) {

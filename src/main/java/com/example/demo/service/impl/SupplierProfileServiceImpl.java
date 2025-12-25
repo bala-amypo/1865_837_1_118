@@ -8,35 +8,34 @@ import java.util.List;
 import java.util.Optional;
 
 public class SupplierProfileServiceImpl {
-    private final SupplierProfileRepository supplierRepo;
 
-    public SupplierProfileServiceImpl(SupplierProfileRepository supplierRepo) {
-        this.supplierRepo = supplierRepo;
+    private final SupplierProfileRepository repo;
+
+    public SupplierProfileServiceImpl(SupplierProfileRepository repo) {
+        this.repo = repo;
+    }
+
+    public SupplierProfile createSupplier(SupplierProfile s) {
+        if (s.getActive() == null) s.setActive(true);
+        return repo.save(s);
     }
 
     public SupplierProfile getSupplierById(Long id) {
-        return supplierRepo.findById(id)
+        return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
-    public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if (supplier.getActive() == null) supplier.setActive(true);
-        supplierRepo.save(supplier); // ignore return
-        return supplier;
-    }
-
     public List<SupplierProfile> getAllSuppliers() {
-        return supplierRepo.findAll();
+        return repo.findAll();
     }
 
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
         SupplierProfile s = getSupplierById(id);
         s.setActive(active);
-        supplierRepo.save(s);
-        return s;
+        return repo.save(s);
     }
 
     public Optional<SupplierProfile> getBySupplierCode(String code) {
-        return supplierRepo.findBySupplierCode(code);
+        return repo.findBySupplierCode(code);
     }
 }

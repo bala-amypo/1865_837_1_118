@@ -7,31 +7,30 @@ import com.example.demo.repository.SupplierRiskAlertRepository;
 import java.util.List;
 
 public class SupplierRiskAlertServiceImpl {
-    private final SupplierRiskAlertRepository alertRepo;
 
-    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository alertRepo) {
-        this.alertRepo = alertRepo;
+    private final SupplierRiskAlertRepository repo;
+
+    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository repo) {
+        this.repo = repo;
     }
 
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
         alert.setResolved(false);
-        alertRepo.save(alert);
-        return alert;
+        return repo.save(alert);
     }
 
     public SupplierRiskAlert resolveAlert(Long id) {
-        SupplierRiskAlert a = alertRepo.findById(id)
+        SupplierRiskAlert alert = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
-        a.setResolved(true);
-        alertRepo.save(a);
-        return a;
+        alert.setResolved(true);
+        return repo.save(alert);
     }
 
-    public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-        return alertRepo.findBySupplierId(supplierId);
+    public List<SupplierRiskAlert> getAlertsBySupplier(Long id) {
+        return repo.findBySupplierId(id);
     }
 
     public List<SupplierRiskAlert> getAllAlerts() {
-        return alertRepo.findAll();
+        return repo.findAll();
     }
 }
