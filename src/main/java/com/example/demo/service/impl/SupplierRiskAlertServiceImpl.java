@@ -15,7 +15,7 @@ public class SupplierRiskAlertServiceImpl {
     }
 
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        alert.setResolved(false);
+        alert.setResolved(false); // REQUIRED BY TEST
         return repo.save(alert);
     }
 
