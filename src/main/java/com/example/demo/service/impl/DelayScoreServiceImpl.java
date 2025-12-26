@@ -18,7 +18,6 @@ public class DelayScoreServiceImpl {
     private final SupplierProfileRepository supplierRepository;
     private final SupplierRiskAlertServiceImpl alertService;
 
-    // Constructor matching the test setup exactly
     public DelayScoreServiceImpl(DelayScoreRecordRepository scoreRepository,
                                  PurchaseOrderRecordRepository poRepository,
                                  DeliveryRecordRepository deliveryRepository,
@@ -35,7 +34,7 @@ public class DelayScoreServiceImpl {
         PurchaseOrderRecord po = poRepository.findById(poId)
                 .orElseThrow(() -> new BadRequestException("Invalid PO"));
 
-        // Test: testComputeDelayScore_inactiveSupplier
+        // Validation: Inactive Supplier [cite: 237]
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Supplier not found"));
         
@@ -45,20 +44,19 @@ public class DelayScoreServiceImpl {
 
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         
-        // Test: testComputeDelayScore_noDeliveries
+        // Validation: No deliveries [cite: 236]
         if (deliveries.isEmpty()) {
             throw new BadRequestException("No deliveries for PO");
         }
 
-        // Logic: Use latest delivery for calculation
         DeliveryRecord lastDelivery = deliveries.get(deliveries.size() - 1);
         long delayDays = ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), lastDelivery.getActualDeliveryDate());
 
-        // Logic: Severity Levels (0=ON_TIME, 1-3=MINOR, 4-7=MODERATE, 8+=SEVERE)
+        // Logic: Severity Levels [cite: 212]
         String severity;
         double score;
         if (delayDays <= 0) {
-            delayDays = 0; // Normalize early to 0
+            delayDays = 0;
             severity = "ON_TIME";
             score = 100.0;
         } else if (delayDays <= 3) {

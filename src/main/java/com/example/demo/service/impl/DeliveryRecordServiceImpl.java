@@ -20,11 +20,11 @@ public class DeliveryRecordServiceImpl {
     }
 
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-        // Test: testRecordDelivery_invalidPo
+        // Validation: PO must exist [cite: 180]
         poRepository.findById(delivery.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        // Test: testRecordDelivery_negativeQuantity
+        // Validation: Non-negative quantity [cite: 187]
         if (delivery.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Delivered quantity must be >=");
         }

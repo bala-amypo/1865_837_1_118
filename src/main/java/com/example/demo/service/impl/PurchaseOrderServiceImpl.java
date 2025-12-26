@@ -22,16 +22,16 @@ public class PurchaseOrderServiceImpl {
     }
 
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-        // Test: testCreatePurchaseOrder_invalidSupplier
+        // Validation: Check if supplier exists [cite: 147]
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
 
-        // Test: testCreatePurchaseOrder_inactiveSupplier
+        // Validation: Check if supplier is active [cite: 167]
         if (!Boolean.TRUE.equals(supplier.getActive())) {
             throw new BadRequestException("Supplier must be active");
         }
         
-        // Basic validation
+        // Validation: Quantity [cite: 165]
         if (po.getQuantity() != null && po.getQuantity() <= 0) {
              throw new BadRequestException("Quantity must be positive");
         }

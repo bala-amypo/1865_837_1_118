@@ -18,6 +18,7 @@ public class SupplierRiskAlertServiceImpl {
 
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
         alert.setAlertDate(LocalDateTime.now());
+        // Validation: Resolved defaults to false [cite: 266]
         if(alert.getResolved() == null) alert.setResolved(false);
         return repository.save(alert);
     }
