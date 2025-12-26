@@ -4,47 +4,45 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SupplierProfileServiceImpl implements SupplierProfileService {
-    private final SupplierProfileRepository supplierProfileRepository;
-
-    public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
-        this.supplierProfileRepository = supplierProfileRepository;
-    }
+    private final SupplierProfileRepository repository;
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if(supplierProfileRepository.existsBySupplierCode(supplier.getSupplierCode())) {
+        if(repository.existsBySupplierCode(supplier.getSupplierCode())) {
             throw new IllegalArgumentException("Duplicate supplier code");
         }
         if(supplier.getActive() == null) supplier.setActive(true);
-        return supplierProfileRepository.save(supplier);
+        return repository.save(supplier);
     }
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override
     public Optional<SupplierProfile> getBySupplierCode(String code) {
-        return supplierProfileRepository.findBySupplierCode(code);
+        return repository.findBySupplierCode(code);
     }
 
     @Override
     public List<SupplierProfile> getAllSuppliers() {
-        return supplierProfileRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
         SupplierProfile s = getSupplierById(id);
         s.setActive(active);
-        return supplierProfileRepository.save(s);
+        return repository.save(s);
     }
 }

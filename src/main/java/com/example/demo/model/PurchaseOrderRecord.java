@@ -1,11 +1,16 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "purchase_order_records")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseOrderRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,40 +24,4 @@ public class PurchaseOrderRecord {
     private Integer quantity;
     private LocalDate promisedDeliveryDate;
     private LocalDate issuedDate;
-
-    public PurchaseOrderRecord() {}
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getPoNumber() { return poNumber; }
-    public void setPoNumber(String poNumber) { this.poNumber = poNumber; }
-    public Long getSupplierId() { return supplierId; }
-    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
-    public String getItemDescription() { return itemDescription; }
-    public void setItemDescription(String itemDescription) { this.itemDescription = itemDescription; }
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
-    public LocalDate getPromisedDeliveryDate() { return promisedDeliveryDate; }
-    public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate) { this.promisedDeliveryDate = promisedDeliveryDate; }
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PurchaseOrderRecord that = (PurchaseOrderRecord) o;
-        return Objects.equals(id, that.id) && 
-               Objects.equals(poNumber, that.poNumber) && 
-               Objects.equals(supplierId, that.supplierId) && 
-               Objects.equals(itemDescription, that.itemDescription) && 
-               Objects.equals(quantity, that.quantity) && 
-               Objects.equals(promisedDeliveryDate, that.promisedDeliveryDate) && 
-               Objects.equals(issuedDate, that.issuedDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, poNumber, supplierId, itemDescription, quantity, promisedDeliveryDate, issuedDate);
-    }
 }
