@@ -20,6 +20,7 @@ public class SupplierProfile {
     private Boolean active = true; 
     private LocalDateTime createdAt;
 
+    // 1. No-Args Constructor (Required for JPA & Mockito)
     public SupplierProfile() {}
 
     @PrePersist
@@ -28,7 +29,7 @@ public class SupplierProfile {
         if(this.active == null) this.active = true;
     }
 
-    // Manual Getters & Setters (No Equals/HashCode)
+    // 2. Standard Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getSupplierCode() { return supplierCode; }
