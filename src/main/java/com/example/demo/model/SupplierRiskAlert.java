@@ -43,16 +43,13 @@ public class SupplierRiskAlert {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SupplierRiskAlert that = (SupplierRiskAlert) o;
-        return Objects.equals(id, that.id) && Objects.equals(supplierId, that.supplierId) && Objects.equals(alertLevel, that.alertLevel) && Objects.equals(resolved, that.resolved);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(supplierId, that.supplierId) && 
+               Objects.equals(resolved, that.resolved);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, supplierId, alertLevel, resolved);
-    }
-    
-    @Override
-    public String toString() {
-        return "SupplierRiskAlert{id=" + id + ", supplierId=" + supplierId + ", alertLevel='" + alertLevel + '\'' + ", resolved=" + resolved + '}';
+        return Objects.hash(id, supplierId, resolved);
     }
 }

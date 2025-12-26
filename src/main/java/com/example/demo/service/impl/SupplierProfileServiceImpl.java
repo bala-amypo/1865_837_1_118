@@ -4,6 +4,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import java.util.Optional;
 public class SupplierProfileServiceImpl implements SupplierProfileService {
     private final SupplierProfileRepository repository;
 
-    // Manual Constructor for Mockito
+    @Autowired
     public SupplierProfileServiceImpl(SupplierProfileRepository repository) {
         this.repository = repository;
     }
@@ -22,6 +23,8 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
         if(repository.existsBySupplierCode(supplier.getSupplierCode())) {
             throw new IllegalArgumentException("Duplicate supplier code");
         }
+        // Tests skip @PrePersist, so we must set default here
+        if(supplier.getActive() == null) supplier.setActive(true);
         return repository.save(supplier);
     }
 

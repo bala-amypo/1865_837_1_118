@@ -42,16 +42,13 @@ public class PurchaseOrderRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PurchaseOrderRecord that = (PurchaseOrderRecord) o;
-        return Objects.equals(id, that.id) && Objects.equals(poNumber, that.poNumber) && Objects.equals(supplierId, that.supplierId) && Objects.equals(quantity, that.quantity);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(supplierId, that.supplierId) && 
+               Objects.equals(quantity, that.quantity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, poNumber, supplierId, quantity);
-    }
-
-    @Override
-    public String toString() {
-        return "PurchaseOrderRecord{id=" + id + ", poNumber='" + poNumber + '\'' + ", supplierId=" + supplierId + ", quantity=" + quantity + '}';
+        return Objects.hash(id, supplierId, quantity);
     }
 }

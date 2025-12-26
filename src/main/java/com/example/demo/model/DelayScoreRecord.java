@@ -48,16 +48,13 @@ public class DelayScoreRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DelayScoreRecord that = (DelayScoreRecord) o;
-        return Objects.equals(id, that.id) && Objects.equals(poId, that.poId) && Objects.equals(score, that.score);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(poId, that.poId) && 
+               Objects.equals(delaySeverity, that.delaySeverity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, poId, score);
-    }
-    
-    @Override
-    public String toString() {
-        return "DelayScoreRecord{id=" + id + ", poId=" + poId + ", score=" + score + '}';
+        return Objects.hash(id, poId, delaySeverity);
     }
 }
