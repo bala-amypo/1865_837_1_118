@@ -20,16 +20,16 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+        Optional<SupplierProfile> opt = repository.findById(id);
+        if (opt.isEmpty()) {
+            throw new ResourceNotFoundException("Supplier not found");
+        }
+        return opt.get();
     }
 
     @Override
-    public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if (supplier.getActive() == null) {
-            supplier.setActive(true); // 🔑 TEST EXPECTATION
-        }
-        return repository.save(supplier);
+    public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
+        return repository.save(supplierProfile);
     }
 
     @Override

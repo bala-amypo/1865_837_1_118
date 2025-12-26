@@ -27,10 +27,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
 
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
-                .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
+        SupplierProfile supplier =
+                supplierRepository.findById(po.getSupplierId())
+                        .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
 
-        if (Boolean.FALSE.equals(supplier.getActive())) {
+        if (supplier.getActive() != null && !supplier.getActive()) {
             throw new BadRequestException("Supplier must be active");
         }
 
