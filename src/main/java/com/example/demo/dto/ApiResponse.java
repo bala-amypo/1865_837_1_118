@@ -5,14 +5,13 @@ public class ApiResponse {
     private String message;
     private Object data;
 
-    // Manual Constructor (Fixes the "argument length" error)
     public ApiResponse(boolean success, String message, Object data) {
         this.success = success;
         this.message = message;
         this.data = data;
     }
-
-    // Getters & Setters
+    
+    // Getters and Setters
     public boolean isSuccess() { return success; }
     public void setSuccess(boolean success) { this.success = success; }
     public String getMessage() { return message; }

@@ -4,18 +4,20 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     private final SupplierRiskAlertRepository repository;
 
+    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        alert.setResolved(false); // Test 40
+        alert.setResolved(false);
         return repository.save(alert);
     }
 
@@ -28,7 +30,7 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public SupplierRiskAlert resolveAlert(Long alertId) {
         SupplierRiskAlert alert = repository.findById(alertId)
                 .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
-        alert.setResolved(true); // Test 39
+        alert.setResolved(true);
         return repository.save(alert);
     }
 
