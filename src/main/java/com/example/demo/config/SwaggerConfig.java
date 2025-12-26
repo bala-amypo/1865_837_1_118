@@ -22,7 +22,7 @@ public class SwaggerConfig {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
                 .addSecurityItem(new SecurityRequirement().addList("bearer-key"))
-                .servers(List.of(new Server().url("")))
+                .servers(List.of(new Server().url("https://9192.408procr.amypo.ai/")))
                 .info(new Info()
                         .title("Supply Chain Weak Link Analyzer API")
                         .version("1.0")
