@@ -1,70 +1,47 @@
-package com.example.demo.controller;
+package com.example.demo.config;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.AppUser;
-import com.example.demo.repository.AppUserRepository;
-import com.example.demo.security.JwtTokenProvider;
-import org.springframework.security.authentication.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.web.SecurityFilterChain;
 
-@RestController
-@RequestMapping("/auth")
-public class AuthController {
+@Configuration
+public class SecurityConfig {
 
-    private final AppUserRepository appUserRepository;
-    private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    public AuthController(
-            AppUserRepository appUserRepository,
-            AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder,
-            JwtTokenProvider jwtTokenProvider) {
-        this.appUserRepository = appUserRepository;
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
+        http
+            // disable csrf
+            .csrf(csrf -> csrf.disable())
+
+            // allow all requests
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()
+            )
+
+            // disable default security UI
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(form -> form.disable());
+
+        return http.build();
     }
 
-    @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest req) {
+    // ✅ AuthenticationManager bean
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
 
-        if (appUserRepository.existsByUsername(req.getUsername())) {
-            throw new BadRequestException("Username already taken");
-        }
-
-        if (appUserRepository.existsByEmail(req.getEmail())) {
-            throw new BadRequestException("Email already taken");
-        }
-
-        AppUser user = new AppUser();
-        user.setUsername(req.getUsername());
-        user.setEmail(req.getEmail());
-        user.setPassword(passwordEncoder.encode(req.getPassword()));
-        user.setRole(req.getRole());
-
-        AppUser saved = appUserRepository.save(user);
-        return jwtTokenProvider.generateToken(saved);
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginRequest req) {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        req.getUsername(),
-                        req.getPassword()
-                )
-        );
-
-        AppUser user = appUserRepository.findByEmail(req.getUsername())
-                .orElseThrow(() ->
-                        new BadRequestException("Invalid credentials"));
-
-        return jwtTokenProvider.generateToken(user);
+    // ✅ PasswordEncoder bean (REQUIRED by AuthController)
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
