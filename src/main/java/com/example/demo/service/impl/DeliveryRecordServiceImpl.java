@@ -1,50 +1,37 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.DeliveryRecord;
-import com.example.demo.repository.DeliveryRecordRepository;
-import com.example.demo.repository.PurchaseOrderRecordRepository;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
+import java.util.*;
 
 public class DeliveryRecordServiceImpl {
 
-    DeliveryRecordRepository deliveryRepository;
-    PurchaseOrderRecordRepository poRepository;
-
-    public DeliveryRecordServiceImpl() {
-    }
+    private final DeliveryRecordRepository repo;
+    private final PurchaseOrderRecordRepository poRepo;
 
     public DeliveryRecordServiceImpl(
-            DeliveryRecordRepository deliveryRepository,
-            PurchaseOrderRecordRepository poRepository) {
-        this.deliveryRepository = deliveryRepository;
-        this.poRepository = poRepository;
+            DeliveryRecordRepository repo,
+            PurchaseOrderRecordRepository poRepo) {
+        this.repo = repo;
+        this.poRepo = poRepo;
     }
 
-    public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-
-        // 🚨 EXACT STRING EXPECTED BY TEST
-        if (delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must >=");
-        }
-
-        poRepository.findById(delivery.getPoId())
+    public DeliveryRecord recordDelivery(DeliveryRecord d) {
+        poRepo.findById(d.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        return deliveryRepository.save(delivery);
+        if (d.getDeliveredQuantity() < 0) {
+            throw new BadRequestException("Delivered quantity must be >=");
+        }
+        return repo.save(d);
     }
 
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return deliveryRepository.findByPoId(poId);
-    }
-
-    public Optional<DeliveryRecord> getDeliveryById(Long id) {
-        return deliveryRepository.findById(id);
+        return repo.findByPoId(poId);
     }
 
     public List<DeliveryRecord> getAllDeliveries() {
-        return deliveryRepository.findAll();
+        return repo.findAll();
     }
 }
