@@ -1,37 +1,50 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import java.util.*;
+import com.example.demo.model.DeliveryRecord;
+import com.example.demo.model.PurchaseOrderRecord;
+import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.repository.PurchaseOrderRecordRepository;
+import com.example.demo.service.DeliveryRecordService;
+import org.springframework.stereotype.Service;
 
-public class DeliveryRecordServiceImpl {
+import java.util.List;
 
-    private final DeliveryRecordRepository repo;
-    private final PurchaseOrderRecordRepository poRepo;
+@Service   // ✅ THIS IS CRITICAL
+public class DeliveryRecordServiceImpl implements DeliveryRecordService {
+
+    private final DeliveryRecordRepository deliveryRecordRepository;
+    private final PurchaseOrderRecordRepository purchaseOrderRecordRepository;
 
     public DeliveryRecordServiceImpl(
-            DeliveryRecordRepository repo,
-            PurchaseOrderRecordRepository poRepo) {
-        this.repo = repo;
-        this.poRepo = poRepo;
+            DeliveryRecordRepository deliveryRecordRepository,
+            PurchaseOrderRecordRepository purchaseOrderRecordRepository) {
+
+        this.deliveryRecordRepository = deliveryRecordRepository;
+        this.purchaseOrderRecordRepository = purchaseOrderRecordRepository;
     }
 
-    public DeliveryRecord recordDelivery(DeliveryRecord d) {
-        poRepo.findById(d.getPoId())
+    @Override
+    public DeliveryRecord recordDelivery(DeliveryRecord deliveryRecord) {
+
+        PurchaseOrderRecord po = purchaseOrderRecordRepository
+                .findById(deliveryRecord.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        if (d.getDeliveredQuantity() < 0) {
+        if (deliveryRecord.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Delivered quantity must be >=");
         }
-        return repo.save(d);
+
+        return deliveryRecordRepository.save(deliveryRecord);
     }
 
+    @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return repo.findByPoId(poId);
+        return deliveryRecordRepository.findByPoId(poId);
     }
 
+    @Override
     public List<DeliveryRecord> getAllDeliveries() {
-        return repo.findAll();
+        return deliveryRecordRepository.findAll();
     }
 }
