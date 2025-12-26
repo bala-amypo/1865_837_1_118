@@ -2,6 +2,8 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -15,17 +17,23 @@ public class SecurityConfig {
             // disable csrf
             .csrf(csrf -> csrf.disable())
 
-            // allow everything without authentication
+            // allow all requests
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll()
             )
 
-            // 🚫 disable default login popup
+            // disable default security UIs
             .httpBasic(httpBasic -> httpBasic.disable())
-
-            // 🚫 disable form login
             .formLogin(form -> form.disable());
 
         return http.build();
+    }
+
+    // ✅ EXPLICIT AuthenticationManager BEAN
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
