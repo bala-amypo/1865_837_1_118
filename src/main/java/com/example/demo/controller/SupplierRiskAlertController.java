@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SupplierRiskAlert;
-import com.example.demo.service.SupplierRiskAlertService;
-import lombok.RequiredArgsConstructor;
+import com.example.demo.service.impl.SupplierRiskAlertServiceImpl;
+import com.example.demo.exception.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,28 +11,46 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/risk-alerts")
-@RequiredArgsConstructor
 public class SupplierRiskAlertController {
 
-    private final SupplierRiskAlertService supplierRiskAlertService;
+    private final SupplierRiskAlertServiceImpl service;
 
-        @PostMapping
-            public ResponseEntity<SupplierRiskAlert> create(@RequestBody SupplierRiskAlert alert) {
-                    return ResponseEntity.ok(supplierRiskAlertService.createAlert(alert));
-                        }
+    public SupplierRiskAlertController(SupplierRiskAlertServiceImpl service) {
+        this.service = service;
+    }
 
-                            @GetMapping("/supplier/{supplierId}")
-                                public ResponseEntity<List<SupplierRiskAlert>> getBySupplier(@PathVariable Long supplierId) {
-                                        return ResponseEntity.ok(supplierRiskAlertService.getAlertsBySupplier(supplierId));
-                                            }
+    // POST /api/risk-alerts - Create risk alert [cite: 697]
+    @PostMapping
+    public ResponseEntity<SupplierRiskAlert> createAlert(@Valid @RequestBody SupplierRiskAlert alert) {
+        SupplierRiskAlert created = service.createAlert(alert);
+        return ResponseEntity.ok(created);
+    }
 
-                                                @PutMapping("/{id}/resolve")
-                                                    public ResponseEntity<SupplierRiskAlert> resolve(@PathVariable Long id) {
-                                                            return ResponseEntity.ok(supplierRiskAlertService.resolveAlert(id));
-                                                                }
+    // PUT /api/risk-alerts/{id}/resolve - Resolve alert [cite: 701]
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<SupplierRiskAlert> resolveAlert(@PathVariable Long id) {
+        SupplierRiskAlert resolved = service.resolveAlert(id);
+        return ResponseEntity.ok(resolved);
+    }
 
-                                                                    @GetMapping
-                                                                        public ResponseEntity<List<SupplierRiskAlert>> getAll() {
-                                                                                return ResponseEntity.ok(supplierRiskAlertService.getAllAlerts());
-                                                                                    }
-                                                                                    }
+    // GET /api/risk-alerts/supplier/{supplierId} - Get alerts for supplier [cite: 706]
+    @GetMapping("/supplier/{supplierId}")
+    public ResponseEntity<List<SupplierRiskAlert>> getAlertsBySupplier(@PathVariable Long supplierId) {
+        return ResponseEntity.ok(service.getAlertsBySupplier(supplierId));
+    }
+
+    // GET /api/risk-alerts/{id} - Get alert by ID [cite: 710]
+    @GetMapping("/{id}")
+    public ResponseEntity<SupplierRiskAlert> getAlertById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getAllAlerts().stream()
+                .filter(a -> a.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Alert not found")));
+    }
+
+    // GET /api/risk-alerts - List all risk alerts [cite: 714]
+    @GetMapping
+    public ResponseEntity<List<SupplierRiskAlert>> getAllAlerts() {
+        return ResponseEntity.ok(service.getAllAlerts());
+    }
+}
