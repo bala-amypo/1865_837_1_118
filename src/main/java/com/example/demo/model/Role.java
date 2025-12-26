@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
 public enum Role {
-    ADMIN, MANAGER, ANALYST
+    ADMIN,
+    MANAGER,
+    ANALYST
 }

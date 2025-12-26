@@ -1,9 +1,19 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "supplier_risk_alert")
 public class SupplierRiskAlert {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long supplierId;
+
     private String alertLevel;
+
     private Boolean resolved = false;
 
     public Long getId() { return id; }

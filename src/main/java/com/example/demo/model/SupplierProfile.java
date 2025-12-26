@@ -1,10 +1,22 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "supplier_profile")
 public class SupplierProfile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String supplierCode;
+
     private String supplierName;
+
     private String email;
+
     private Boolean active = true;
 
     public Long getId() { return id; }
