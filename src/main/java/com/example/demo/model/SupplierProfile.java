@@ -2,7 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "supplier_profiles")
@@ -29,6 +28,7 @@ public class SupplierProfile {
         if(this.active == null) this.active = true;
     }
 
+    // Manual Getters & Setters (No Equals/HashCode)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getSupplierCode() { return supplierCode; }
@@ -43,19 +43,4 @@ public class SupplierProfile {
     public void setActive(Boolean active) { this.active = active; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SupplierProfile that = (SupplierProfile) o;
-        return Objects.equals(id, that.id) && 
-               Objects.equals(supplierCode, that.supplierCode) && 
-               Objects.equals(active, that.active);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, supplierCode, active);
-    }
 }

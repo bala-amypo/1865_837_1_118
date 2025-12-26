@@ -17,14 +17,14 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepo;
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
-    private final SupplierRiskAlertService alertService; // Changed back to Service
+    private final SupplierRiskAlertService alertService;
 
     @Autowired
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepo,
                                  PurchaseOrderRecordRepository poRepo,
                                  DeliveryRecordRepository deliveryRepo,
                                  SupplierProfileRepository supplierRepo,
-                                 SupplierRiskAlertService alertService) { // Matches Test file exactly
+                                 SupplierRiskAlertService alertService) {
         this.delayRepo = delayRepo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
@@ -74,7 +74,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             alert.setSupplierId(po.getSupplierId());
             alert.setAlertLevel("HIGH");
             alert.setMessage("Severe delay for PO " + po.getPoNumber());
-            // Use the Service method, which correctly handles the Logic now
             alertService.createAlert(alert);
         }
 

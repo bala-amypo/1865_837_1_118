@@ -2,7 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "supplier_risk_alerts")
@@ -37,20 +36,4 @@ public class SupplierRiskAlert {
     public void setAlertDate(LocalDateTime alertDate) { this.alertDate = alertDate; }
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SupplierRiskAlert that = (SupplierRiskAlert) o;
-        // Simplified equality to ensure test matching passes loosely on ID and properties
-        return Objects.equals(id, that.id) && 
-               Objects.equals(supplierId, that.supplierId) && 
-               Objects.equals(resolved, that.resolved);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, supplierId, resolved);
-    }
 }
