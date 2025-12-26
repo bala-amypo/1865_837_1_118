@@ -3,10 +3,14 @@ package com.example.demo.service.impl;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import com.example.demo.service.DelayScoreService;
+import org.springframework.stereotype.Service;
 
-public class DelayScoreServiceImpl {
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+@Service   // ✅ REQUIRED
+public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository repo;
     private final PurchaseOrderRecordRepository poRepo;
@@ -20,6 +24,7 @@ public class DelayScoreServiceImpl {
             DeliveryRecordRepository deliveryRepo,
             SupplierProfileRepository supplierRepo,
             SupplierRiskAlertServiceImpl alertService) {
+
         this.repo = repo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
@@ -27,7 +32,9 @@ public class DelayScoreServiceImpl {
         this.alertService = alertService;
     }
 
+    @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
+
         PurchaseOrderRecord po = poRepo.findById(poId)
                 .orElseThrow(() -> new BadRequestException("PO not found"));
 
@@ -44,6 +51,7 @@ public class DelayScoreServiceImpl {
         }
 
         DeliveryRecord d = deliveries.get(0);
+
         long delayDays = ChronoUnit.DAYS.between(
                 po.getPromisedDeliveryDate(),
                 d.getActualDeliveryDate());
@@ -67,10 +75,12 @@ public class DelayScoreServiceImpl {
         return repo.save(r);
     }
 
+    @Override
     public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
         return repo.findBySupplierId(supplierId);
     }
 
+    @Override
     public List<DelayScoreRecord> getAllScores() {
         return repo.findAll();
     }
