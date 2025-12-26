@@ -1,20 +1,12 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.DeliveryRecord;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
-import java.util.Optional;
 
-public interface DeliveryRecordRepository {
+public interface DeliveryRecordRepository
+        extends JpaRepository<DeliveryRecord, Long> {
 
-    // used in recordDelivery()
-    DeliveryRecord save(Object o);
-
-    // 🔴 REQUIRED for getDeliveryById()
-    Optional<DeliveryRecord> findById(Long id);
-
-    // used in getDeliveriesByPO()
     List<DeliveryRecord> findByPoId(Long poId);
-
-    // used in criteria tests
-    List<DeliveryRecord> findAll();
 }
