@@ -1,47 +1,70 @@
-package com.example.demo.config;
+package com.example.demo.controller;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.AppUser;
+import com.example.demo.repository.AppUserRepository;
+import com.example.demo.security.JwtTokenProvider;
+import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.*;
 
-@Configuration
-public class SecurityConfig {
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    private final AppUserRepository appUserRepository;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
-        http
-            // disable csrf
-            .csrf(csrf -> csrf.disable())
-
-            // allow all requests
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
-            )
-
-            // disable default security UI
-            .httpBasic(httpBasic -> httpBasic.disable())
-            .formLogin(form -> form.disable());
-
-        return http.build();
+    public AuthController(
+            AppUserRepository appUserRepository,
+            AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder,
+            JwtTokenProvider jwtTokenProvider) {
+        this.appUserRepository = appUserRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ AuthenticationManager bean
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequest req) {
 
-        return authenticationConfiguration.getAuthenticationManager();
+        if (appUserRepository.existsByUsername(req.getUsername())) {
+            throw new BadRequestException("Username already taken");
+        }
+
+        if (appUserRepository.existsByEmail(req.getEmail())) {
+            throw new BadRequestException("Email already taken");
+        }
+
+        AppUser user = new AppUser();
+        user.setUsername(req.getUsername());
+        user.setEmail(req.getEmail());
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setRole(req.getRole());
+
+        AppUser saved = appUserRepository.save(user);
+        return jwtTokenProvider.generateToken(saved);
     }
 
-    // ✅ PasswordEncoder bean (REQUIRED by AuthController)
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest req) {
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        req.getUsername(),
+                        req.getPassword()
+                )
+        );
+
+        AppUser user = appUserRepository.findByEmail(req.getUsername())
+                .orElseThrow(() ->
+                        new BadRequestException("Invalid credentials"));
+
+        return jwtTokenProvider.generateToken(user);
     }
 }
