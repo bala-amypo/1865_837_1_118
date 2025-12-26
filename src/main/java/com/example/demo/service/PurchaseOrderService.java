@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PurchaseOrderService {
-    PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po);
+
+    PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord purchaseOrderRecord);
+
     List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId);
-    Optional<PurchaseOrderRecord> getPOById(Long id);
+
+    Optional<PurchaseOrderRecord> getPOById(Long poId);
+
     List<PurchaseOrderRecord> getAllPurchaseOrders();
 }
