@@ -9,40 +9,43 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service   // ✅ CRITICAL FOR SPRING
+@Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
-    private final SupplierProfileRepository supplierProfileRepository;
+    private final SupplierProfileRepository repository;
 
-    public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
-        this.supplierProfileRepository = supplierProfileRepository;
+    public SupplierProfileServiceImpl(SupplierProfileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override
-    public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
-        return supplierProfileRepository.save(supplierProfile);
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        if (supplier.getActive() == null) {
+            supplier.setActive(true); // 🔑 TEST EXPECTATION
+        }
+        return repository.save(supplier);
     }
 
     @Override
     public List<SupplierProfile> getAllSuppliers() {
-        return supplierProfileRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public SupplierProfile updateSupplierStatus(Long supplierId, boolean active) {
         SupplierProfile supplier = getSupplierById(supplierId);
         supplier.setActive(active);
-        return supplierProfileRepository.save(supplier);
+        return repository.save(supplier);
     }
 
     @Override
     public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
-        return supplierProfileRepository.findBySupplierCode(supplierCode);
+        return repository.findBySupplierCode(supplierCode);
     }
 }

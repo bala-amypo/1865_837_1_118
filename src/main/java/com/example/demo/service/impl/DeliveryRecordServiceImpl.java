@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.DeliveryRecord;
-import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.service.DeliveryRecordService;
@@ -10,41 +9,39 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // ✅ THIS IS CRITICAL
+@Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
-    private final DeliveryRecordRepository deliveryRecordRepository;
-    private final PurchaseOrderRecordRepository purchaseOrderRecordRepository;
+    private final DeliveryRecordRepository repository;
+    private final PurchaseOrderRecordRepository poRepository;
 
     public DeliveryRecordServiceImpl(
-            DeliveryRecordRepository deliveryRecordRepository,
-            PurchaseOrderRecordRepository purchaseOrderRecordRepository) {
-
-        this.deliveryRecordRepository = deliveryRecordRepository;
-        this.purchaseOrderRecordRepository = purchaseOrderRecordRepository;
+            DeliveryRecordRepository repository,
+            PurchaseOrderRecordRepository poRepository) {
+        this.repository = repository;
+        this.poRepository = poRepository;
     }
 
     @Override
-    public DeliveryRecord recordDelivery(DeliveryRecord deliveryRecord) {
+    public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
-        PurchaseOrderRecord po = purchaseOrderRecordRepository
-                .findById(deliveryRecord.getPoId())
+        poRepository.findById(delivery.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        if (deliveryRecord.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must be >=");
+        if (delivery.getDeliveredQuantity() < 0) {
+            throw new BadRequestException("Delivered quantity must >=");
         }
 
-        return deliveryRecordRepository.save(deliveryRecord);
+        return repository.save(delivery);
     }
 
     @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return deliveryRecordRepository.findByPoId(poId);
+        return repository.findByPoId(poId);
     }
 
     @Override
     public List<DeliveryRecord> getAllDeliveries() {
-        return deliveryRecordRepository.findAll();
+        return repository.findAll();
     }
 }

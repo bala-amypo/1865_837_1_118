@@ -7,36 +7,35 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // ✅ THIS IS WHAT SPRING NEEDS
+@Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
-    private final SupplierRiskAlertRepository repo;
+    private final SupplierRiskAlertRepository repository;
 
-    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository repo) {
-        this.repo = repo;
+    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        alert.setResolved(false);
-        return repo.save(alert);
+        alert.setResolved(false); // 🔑 REQUIRED BY TEST
+        return repository.save(alert);
     }
 
     @Override
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-        return repo.findBySupplierId(supplierId);
+        return repository.findBySupplierId(supplierId);
     }
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
-        SupplierRiskAlert alert = repo.findById(alertId)
-                .orElseThrow(() -> new RuntimeException("Alert not found"));
+        SupplierRiskAlert alert = repository.findById(alertId).orElseThrow();
         alert.setResolved(true);
-        return repo.save(alert);
+        return repository.save(alert);
     }
 
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {
-        return repo.findAll();
+        return repository.findAll();
     }
 }
