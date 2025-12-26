@@ -1,12 +1,27 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "delay_score_record")
 public class DelayScoreRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long poId;
+
     private Long supplierId;
+
     private Integer delayDays;
+
     private Double score;
+
     private String delaySeverity;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Long getPoId() { return poId; }
     public void setPoId(Long poId) { this.poId = poId; }
