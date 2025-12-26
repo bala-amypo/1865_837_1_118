@@ -5,8 +5,6 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
-import com.example.demo.service.SupplierRiskAlertService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -17,19 +15,19 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepo;
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
-    private final SupplierRiskAlertService alertService;
+    // FIX: Use Repository directly to satisfy Mockito injection in tests
+    private final SupplierRiskAlertRepository alertRepo; 
 
-    @Autowired
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepo,
                                  PurchaseOrderRecordRepository poRepo,
                                  DeliveryRecordRepository deliveryRepo,
                                  SupplierProfileRepository supplierRepo,
-                                 SupplierRiskAlertService alertService) {
+                                 SupplierRiskAlertRepository alertRepo) {
         this.delayRepo = delayRepo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
         this.supplierRepo = supplierRepo;
-        this.alertService = alertService;
+        this.alertRepo = alertRepo;
     }
 
     @Override
@@ -74,7 +72,8 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             alert.setSupplierId(po.getSupplierId());
             alert.setAlertLevel("HIGH");
             alert.setMessage("Severe delay for PO " + po.getPoNumber());
-            alertService.createAlert(alert);
+            alert.setResolved(false);
+            alertRepo.save(alert);
         }
 
         return delayRepo.save(record);
