@@ -4,7 +4,6 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     private final SupplierRiskAlertRepository riskAlertRepository;
 
-    @Autowired
     public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
         this.riskAlertRepository = riskAlertRepository;
     }

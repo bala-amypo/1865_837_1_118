@@ -6,7 +6,6 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
 import com.example.demo.service.SupplierRiskAlertService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -19,7 +18,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final SupplierProfileRepository supplierProfileRepository;
     private final SupplierRiskAlertService riskAlertService;
 
-    @Autowired
+    // Matches Test Setup() EXACTLY
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayScoreRecordRepository,
                                  PurchaseOrderRecordRepository poRepository,
                                  DeliveryRecordRepository deliveryRepository,

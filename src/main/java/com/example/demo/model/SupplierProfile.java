@@ -49,11 +49,16 @@ public class SupplierProfile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SupplierProfile that = (SupplierProfile) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(supplierCode, that.supplierCode) && 
+               Objects.equals(supplierName, that.supplierName) && 
+               Objects.equals(email, that.email) && 
+               Objects.equals(phone, that.phone) && 
+               Objects.equals(active, that.active);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, supplierCode, supplierName, email, phone, active);
     }
 }

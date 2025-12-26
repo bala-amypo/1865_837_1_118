@@ -34,11 +34,15 @@ public class DeliveryRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeliveryRecord that = (DeliveryRecord) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(poId, that.poId) && 
+               Objects.equals(actualDeliveryDate, that.actualDeliveryDate) && 
+               Objects.equals(deliveredQuantity, that.deliveredQuantity) && 
+               Objects.equals(notes, that.notes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, poId, actualDeliveryDate, deliveredQuantity, notes);
     }
 }

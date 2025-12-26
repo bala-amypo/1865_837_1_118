@@ -42,11 +42,17 @@ public class PurchaseOrderRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PurchaseOrderRecord that = (PurchaseOrderRecord) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(poNumber, that.poNumber) && 
+               Objects.equals(supplierId, that.supplierId) && 
+               Objects.equals(itemDescription, that.itemDescription) && 
+               Objects.equals(quantity, that.quantity) && 
+               Objects.equals(promisedDeliveryDate, that.promisedDeliveryDate) && 
+               Objects.equals(issuedDate, that.issuedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, poNumber, supplierId, itemDescription, quantity, promisedDeliveryDate, issuedDate);
     }
 }

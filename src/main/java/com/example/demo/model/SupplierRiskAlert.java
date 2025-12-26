@@ -43,11 +43,15 @@ public class SupplierRiskAlert {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SupplierRiskAlert that = (SupplierRiskAlert) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && 
+               Objects.equals(supplierId, that.supplierId) && 
+               Objects.equals(alertLevel, that.alertLevel) && 
+               Objects.equals(message, that.message) && 
+               Objects.equals(resolved, that.resolved);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, supplierId, alertLevel, message, resolved);
     }
 }

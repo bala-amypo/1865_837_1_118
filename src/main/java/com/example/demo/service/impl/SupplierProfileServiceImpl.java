@@ -4,7 +4,6 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,6 @@ import java.util.Optional;
 public class SupplierProfileServiceImpl implements SupplierProfileService {
     private final SupplierProfileRepository supplierProfileRepository;
 
-    @Autowired
     public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
         this.supplierProfileRepository = supplierProfileRepository;
     }
