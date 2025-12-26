@@ -4,42 +4,39 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
-import com.example.demo.service.DeliveryRecordService;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
-public class DeliveryRecordServiceImpl implements DeliveryRecordService {
+@Service
+public class DeliveryRecordServiceImpl {
 
-    private final DeliveryRecordRepository repository;
+    private final DeliveryRecordRepository deliveryRepository;
     private final PurchaseOrderRecordRepository poRepository;
 
-    public DeliveryRecordServiceImpl(
-            DeliveryRecordRepository repository,
-            PurchaseOrderRecordRepository poRepository) {
-        this.repository = repository;
+    public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository, 
+                                   PurchaseOrderRecordRepository poRepository) {
+        this.deliveryRepository = deliveryRepository;
         this.poRepository = poRepository;
     }
 
-    @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-
+        // Test: testRecordDelivery_invalidPo
         poRepository.findById(delivery.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
+        // Test: testRecordDelivery_negativeQuantity
         if (delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must >=");
+            throw new BadRequestException("Delivered quantity must be >=");
         }
 
-        return repository.save(delivery);
+        return deliveryRepository.save(delivery);
     }
 
-    @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return repository.findByPoId(poId);
+        return deliveryRepository.findByPoId(poId);
     }
 
-    @Override
     public List<DeliveryRecord> getAllDeliveries() {
-        return repository.findAll();
+        return deliveryRepository.findAll();
     }
 }
