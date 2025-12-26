@@ -6,44 +6,33 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
 import com.example.demo.service.SupplierRiskAlertService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DelayScoreServiceImpl implements DelayScoreService {
-    private final DelayScoreRecordRepository delayScoreRecordRepository;
-    private final PurchaseOrderRecordRepository poRepository;
-    private final DeliveryRecordRepository deliveryRepository;
-    private final SupplierProfileRepository supplierProfileRepository;
-    private final SupplierRiskAlertService riskAlertService;
-
-    // Matches Test Setup() EXACTLY
-    public DelayScoreServiceImpl(DelayScoreRecordRepository delayScoreRecordRepository,
-                                 PurchaseOrderRecordRepository poRepository,
-                                 DeliveryRecordRepository deliveryRepository,
-                                 SupplierProfileRepository supplierProfileRepository,
-                                 SupplierRiskAlertService riskAlertService) {
-        this.delayScoreRecordRepository = delayScoreRecordRepository;
-        this.poRepository = poRepository;
-        this.deliveryRepository = deliveryRepository;
-        this.supplierProfileRepository = supplierProfileRepository;
-        this.riskAlertService = riskAlertService;
-    }
+    private final DelayScoreRecordRepository delayRepo;
+    private final PurchaseOrderRecordRepository poRepo;
+    private final DeliveryRecordRepository deliveryRepo;
+    private final SupplierProfileRepository supplierRepo;
+    private final SupplierRiskAlertService alertService; // This matches the test's dependency requirement
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
-        PurchaseOrderRecord po = poRepository.findById(poId)
+        PurchaseOrderRecord po = poRepo.findById(poId)
                 .orElseThrow(() -> new ResourceNotFoundException("PO not found"));
         
-        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
+        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
 
         if (!Boolean.TRUE.equals(supplier.getActive())) {
             throw new BadRequestException("Inactive supplier");
         }
 
-        List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
+        List<DeliveryRecord> deliveries = deliveryRepo.findByPoId(poId);
         if (deliveries.isEmpty()) {
             throw new BadRequestException("No deliveries");
         }
@@ -73,19 +62,19 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             alert.setSupplierId(po.getSupplierId());
             alert.setAlertLevel("HIGH");
             alert.setMessage("Severe delay for PO " + po.getPoNumber());
-            riskAlertService.createAlert(alert);
+            alertService.createAlert(alert);
         }
 
-        return delayScoreRecordRepository.save(record);
+        return delayRepo.save(record);
     }
 
     @Override
     public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
-        return delayScoreRecordRepository.findBySupplierId(supplierId);
+        return delayRepo.findBySupplierId(supplierId);
     }
 
     @Override
     public List<DelayScoreRecord> getAllScores() {
-        return delayScoreRecordRepository.findAll();
+        return delayRepo.findAll();
     }
 }
