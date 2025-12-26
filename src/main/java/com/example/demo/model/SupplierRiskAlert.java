@@ -24,7 +24,6 @@ public class SupplierRiskAlert {
         if(this.resolved == null) this.resolved = false;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Long getSupplierId() { return supplierId; }

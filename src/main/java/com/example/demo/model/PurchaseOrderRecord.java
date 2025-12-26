@@ -21,7 +21,6 @@ public class PurchaseOrderRecord {
 
     public PurchaseOrderRecord() {}
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getPoNumber() { return poNumber; }
@@ -36,4 +35,4 @@ public class PurchaseOrderRecord {
     public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate) { this.promisedDeliveryDate = promisedDeliveryDate; }
     public LocalDate getIssuedDate() { return issuedDate; }
     public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
-}   
+}

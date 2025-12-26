@@ -6,24 +6,25 @@ import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.PurchaseOrderService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     private final PurchaseOrderRecordRepository poRepository;
     private final SupplierProfileRepository supplierRepository;
 
+    public PurchaseOrderServiceImpl(PurchaseOrderRecordRepository poRepository, SupplierProfileRepository supplierRepository) {
+        this.poRepository = poRepository;
+        this.supplierRepository = supplierRepository;
+    }
+
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-        // Test 9: Invalid Supplier
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
         
-        // Test 10: Inactive Supplier
         if (!Boolean.TRUE.equals(supplier.getActive())) {
             throw new BadRequestException("must be active");
         }
