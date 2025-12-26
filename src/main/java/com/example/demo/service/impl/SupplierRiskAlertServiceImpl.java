@@ -17,7 +17,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        // Explicit logic required for mocks
         if (alert.getResolved() == null) {
             alert.setResolved(false);
         }

@@ -12,7 +12,6 @@ import java.util.Optional;
 public class SupplierProfileServiceImpl implements SupplierProfileService {
     private final SupplierProfileRepository repository;
 
-    // Single Constructor: Mockito will pick this and inject the Mock Repository
     public SupplierProfileServiceImpl(SupplierProfileRepository repository) {
         this.repository = repository;
     }

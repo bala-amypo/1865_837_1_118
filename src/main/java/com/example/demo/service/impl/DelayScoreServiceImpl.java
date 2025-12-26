@@ -18,7 +18,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final SupplierProfileRepository supplierRepo;
     private final SupplierRiskAlertService alertService;
 
-    // Matches Test Setup() EXACTLY
+    // Matches Test Setup() EXACTLY: 4 Repos + 1 Service
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepo,
                                  PurchaseOrderRecordRepository poRepo,
                                  DeliveryRecordRepository deliveryRepo,
