@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "supplier_profiles")
@@ -42,4 +43,22 @@ public class SupplierProfile {
     public void setActive(Boolean active) { this.active = active; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SupplierProfile that = (SupplierProfile) o;
+        return Objects.equals(id, that.id) && Objects.equals(supplierCode, that.supplierCode) && Objects.equals(supplierName, that.supplierName) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(active, that.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, supplierCode, supplierName, email, phone, active);
+    }
+
+    @Override
+    public String toString() {
+        return "SupplierProfile{id=" + id + ", supplierCode='" + supplierCode + '\'' + ", supplierName='" + supplierName + '\'' + ", email='" + email + '\'' + ", phone='" + phone + '\'' + ", active=" + active + '}';
+    }
 }

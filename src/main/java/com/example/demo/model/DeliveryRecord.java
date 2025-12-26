@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "delivery_records")
@@ -27,4 +28,22 @@ public class DeliveryRecord {
     public void setDeliveredQuantity(Integer deliveredQuantity) { this.deliveredQuantity = deliveredQuantity; }
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryRecord that = (DeliveryRecord) o;
+        return Objects.equals(id, that.id) && Objects.equals(poId, that.poId) && Objects.equals(deliveredQuantity, that.deliveredQuantity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, poId, deliveredQuantity);
+    }
+    
+    @Override
+    public String toString() {
+        return "DeliveryRecord{id=" + id + ", poId=" + poId + ", deliveredQuantity=" + deliveredQuantity + '}';
+    }
 }
