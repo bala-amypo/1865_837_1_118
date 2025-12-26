@@ -1,27 +1,33 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "supplier_profiles")
 @Data
 @NoArgsConstructor
-@Table(name = "supplier_profiles")
+@AllArgsConstructor
 public class SupplierProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(unique = true)
     private String supplierCode;
-
-    @NotBlank
+    
     private String supplierName;
-
     private String email;
     private String phone;
-    private Boolean active = true;
+    
+    private Boolean active = true; // Default true (Test 3)
+    
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if(this.active == null) this.active = true;
+    }
 }

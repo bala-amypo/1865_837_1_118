@@ -1,14 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "delay_score_records")
 @Data
 @NoArgsConstructor
-@Table(name = "delay_score_records")
+@AllArgsConstructor
 public class DelayScoreRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +16,17 @@ public class DelayScoreRecord {
 
     private Long supplierId;
     
-    @Column(unique = true)
+    @Column(unique = true) // One score per PO (Test 31)
     private Long poId;
-
+    
     private Integer delayDays;
     private String delaySeverity; // ON_TIME, MINOR, MODERATE, SEVERE
     private Double score;
+    
     private LocalDateTime computedAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.computedAt = LocalDateTime.now();
+    }
 }

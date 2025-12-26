@@ -2,13 +2,11 @@ package com.example.demo.repository;
 
 import com.example.demo.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
-@Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
-    Optional<AppUser> findByUsername(String username);
-    boolean existsByUsername(String username);
+    Optional<AppUser> findByUsername(String username); // Test 45
+    boolean existsByUsername(String username); // Test 42
     boolean existsByEmail(String email);
 }
