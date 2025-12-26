@@ -14,25 +14,26 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DelayScoreServiceImpl implements DelayScoreService {
-    private final DelayScoreRecordRepository delayRepo;
-    private final PurchaseOrderRecordRepository poRepo;
-    private final DeliveryRecordRepository deliveryRepo;
-    private final SupplierProfileRepository supplierRepo;
-    private final SupplierRiskAlertService alertService; // This matches the test's dependency requirement
+    private final DelayScoreRecordRepository delayScoreRecordRepository;
+    private final PurchaseOrderRecordRepository poRepository;
+    private final DeliveryRecordRepository deliveryRepository;
+    private final SupplierProfileRepository supplierProfileRepository;
+    // IMPORTANT: Dependencies must be SERVICES where expected by the test
+    private final SupplierRiskAlertService riskAlertService;
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
-        PurchaseOrderRecord po = poRepo.findById(poId)
+        PurchaseOrderRecord po = poRepository.findById(poId)
                 .orElseThrow(() -> new ResourceNotFoundException("PO not found"));
         
-        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
 
         if (!Boolean.TRUE.equals(supplier.getActive())) {
             throw new BadRequestException("Inactive supplier");
         }
 
-        List<DeliveryRecord> deliveries = deliveryRepo.findByPoId(poId);
+        List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
             throw new BadRequestException("No deliveries");
         }
@@ -62,19 +63,19 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             alert.setSupplierId(po.getSupplierId());
             alert.setAlertLevel("HIGH");
             alert.setMessage("Severe delay for PO " + po.getPoNumber());
-            alertService.createAlert(alert);
+            riskAlertService.createAlert(alert);
         }
 
-        return delayRepo.save(record);
+        return delayScoreRecordRepository.save(record);
     }
 
     @Override
     public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
-        return delayRepo.findBySupplierId(supplierId);
+        return delayScoreRecordRepository.findBySupplierId(supplierId);
     }
 
     @Override
     public List<DelayScoreRecord> getAllScores() {
-        return delayRepo.findAll();
+        return delayScoreRecordRepository.findAll();
     }
 }

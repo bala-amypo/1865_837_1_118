@@ -19,6 +19,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
         if(repository.existsBySupplierCode(supplier.getSupplierCode())) {
             throw new IllegalArgumentException("Duplicate supplier code");
         }
+        // Test fix: Explicitly set default for mocks
         if(supplier.getActive() == null) supplier.setActive(true);
         return repository.save(supplier);
     }
