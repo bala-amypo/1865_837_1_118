@@ -23,13 +23,25 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
 
-    // ✅ CONSTRUCTOR EXACTLY MATCHES TEST
+    // 🔹 Constructor REQUIRED by tests (5 args)
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository scoreRepo,
             PurchaseOrderRecordRepository poRepo,
             DeliveryRecordRepository deliveryRepo,
-            SupplierProfileRepository supplierRepo) {
+            SupplierProfileRepository supplierRepo,
+            SupplierRiskAlertServiceImpl alertService // <-- REQUIRED by test
+    ) {
+        this(scoreRepo, poRepo, deliveryRepo, supplierRepo);
+        // alertService is NOT used, but required for test compatibility
+    }
 
+    // 🔹 Constructor for Spring (4 args)
+    public DelayScoreServiceImpl(
+            DelayScoreRecordRepository scoreRepo,
+            PurchaseOrderRecordRepository poRepo,
+            DeliveryRecordRepository deliveryRepo,
+            SupplierProfileRepository supplierRepo
+    ) {
         this.scoreRepo = scoreRepo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
