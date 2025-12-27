@@ -23,10 +23,13 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
 
-    public DelayScoreServiceImpl(DelayScoreRecordRepository scoreRepo,
-                                 PurchaseOrderRecordRepository poRepo,
-                                 DeliveryRecordRepository deliveryRepo,
-                                 SupplierProfileRepository supplierRepo) {
+    // ✅ CONSTRUCTOR EXACTLY MATCHES TEST
+    public DelayScoreServiceImpl(
+            DelayScoreRecordRepository scoreRepo,
+            PurchaseOrderRecordRepository poRepo,
+            DeliveryRecordRepository deliveryRepo,
+            SupplierProfileRepository supplierRepo) {
+
         this.scoreRepo = scoreRepo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
