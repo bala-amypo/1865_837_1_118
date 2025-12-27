@@ -3,51 +3,71 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "supplier_profiles")
 public class SupplierProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String supplierCode;
-    private String supplierName;
-    private String email;
-    private Boolean active = true;
+    @Column(unique = true, nullable = false)
+    private String code;
 
-    // ✅ REQUIRED BY TESTS
+    private String name;
+
+    private String location;
+
+    private boolean active = true;
+
+    // ===== Constructors =====
+    public SupplierProfile() {
+    }
+
+    public SupplierProfile(String code, String name, String location) {
+        this.code = code;
+        this.name = name;
+        this.location = location;
+        this.active = true;
+    }
+
+    // ===== Getters & Setters =====
     public Long getId() {
         return id;
     }
 
-    public String getSupplierCode() {
-        return supplierCode;
+    public void setId(Long id) {     // REQUIRED BY SERVICES
+        this.id = id;
     }
 
-    public void setSupplierCode(String supplierCode) {
-        this.supplierCode = supplierCode;
+    public String getCode() {
+        return code;
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+    public String getName() {        // REQUIRED BY SupplierServiceImpl
+        return name;
     }
 
-    public String getEmail() {
-        return email;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getLocation() {    // REQUIRED BY SupplierServiceImpl
+        return location;
     }
 
-    public Boolean getActive() {
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public boolean isActive() {      // REQUIRED BY toggleStatus()
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 }
