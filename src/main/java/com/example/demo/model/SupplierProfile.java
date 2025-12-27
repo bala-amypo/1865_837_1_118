@@ -10,8 +10,9 @@ public class SupplierProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 🔴 MUST MATCH repository method findBySupplierCode()
     @Column(unique = true, nullable = false)
-    private String code;
+    private String supplierCode;
 
     private String name;
 
@@ -23,8 +24,8 @@ public class SupplierProfile {
     public SupplierProfile() {
     }
 
-    public SupplierProfile(String code, String name, String location) {
-        this.code = code;
+    public SupplierProfile(String supplierCode, String name, String location) {
+        this.supplierCode = supplierCode;
         this.name = name;
         this.location = location;
         this.active = true;
@@ -35,19 +36,19 @@ public class SupplierProfile {
         return id;
     }
 
-    public void setId(Long id) {     // REQUIRED BY SERVICES
+    public void setId(Long id) {   // used by services/tests
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getSupplierCode() {
+        return supplierCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setSupplierCode(String supplierCode) {
+        this.supplierCode = supplierCode;
     }
 
-    public String getName() {        // REQUIRED BY SupplierServiceImpl
+    public String getName() {
         return name;
     }
 
@@ -55,7 +56,7 @@ public class SupplierProfile {
         this.name = name;
     }
 
-    public String getLocation() {    // REQUIRED BY SupplierServiceImpl
+    public String getLocation() {
         return location;
     }
 
@@ -63,7 +64,7 @@ public class SupplierProfile {
         this.location = location;
     }
 
-    public boolean isActive() {      // REQUIRED BY toggleStatus()
+    public boolean isActive() {
         return active;
     }
 
