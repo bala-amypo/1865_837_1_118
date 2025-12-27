@@ -5,15 +5,17 @@ import com.example.demo.model.SupplierProfile;
 import java.util.List;
 import java.util.Optional;
 
-public interface SupplierProfileService {
+public interface SupplierService {
 
+    // Create a new supplier
     SupplierProfile createSupplier(SupplierProfile supplier);
 
-    SupplierProfile getSupplierById(Long id);
+    // Enable / Disable supplier (toggle active status)
+    SupplierProfile toggleStatus(Long id);
 
-    List<SupplierProfile> getAllSuppliers();
+    // Find supplier by unique supplier code
+    Optional<SupplierProfile> findByCode(String code);
 
-    SupplierProfile updateSupplierStatus(Long id, boolean active);
-
-    Optional<SupplierProfile> getBySupplierCode(String code);
+    // Fetch all suppliers
+    List<SupplierProfile> findAll();
 }
