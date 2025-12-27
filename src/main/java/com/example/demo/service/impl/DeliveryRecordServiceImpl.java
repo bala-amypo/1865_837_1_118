@@ -2,9 +2,13 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.DeliveryRecord;
-import com.example.demo.repository.*;
-import java.util.*;
+import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.repository.PurchaseOrderRecordRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class DeliveryRecordServiceImpl {
 
     private final DeliveryRecordRepository deliveryRepo;
@@ -23,6 +27,7 @@ public class DeliveryRecordServiceImpl {
         if (delivery.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Delivered quantity must be >=");
         }
+
         return deliveryRepo.save(delivery);
     }
 

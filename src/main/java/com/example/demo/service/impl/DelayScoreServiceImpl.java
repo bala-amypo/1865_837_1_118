@@ -1,11 +1,20 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import com.example.demo.model.DelayScoreRecord;
+import com.example.demo.model.DeliveryRecord;
+import com.example.demo.model.PurchaseOrderRecord;
+import com.example.demo.model.SupplierProfile;
+import com.example.demo.repository.DelayScoreRecordRepository;
+import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.repository.PurchaseOrderRecordRepository;
+import com.example.demo.repository.SupplierProfileRepository;
+import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+@Service
 public class DelayScoreServiceImpl {
 
     private final DelayScoreRecordRepository scoreRepo;
@@ -27,8 +36,11 @@ public class DelayScoreServiceImpl {
     }
 
     public DelayScoreRecord computeDelayScore(Long poId) {
-        PurchaseOrderRecord po = poRepo.findById(poId).orElseThrow();
-        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId()).orElseThrow();
+        PurchaseOrderRecord po = poRepo.findById(poId)
+                .orElseThrow(() -> new RuntimeException("PO not found"));
+
+        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
         if (!supplier.getActive()) {
             throw new BadRequestException("Inactive supplier");
@@ -39,21 +51,22 @@ public class DelayScoreServiceImpl {
             throw new BadRequestException("No deliveries");
         }
 
-        DeliveryRecord d = deliveries.get(0);
-        long delay = ChronoUnit.DAYS.between(
+        DeliveryRecord delivery = deliveries.get(0);
+
+        long delayDays = ChronoUnit.DAYS.between(
                 po.getPromisedDeliveryDate(),
-                d.getActualDeliveryDate()
+                delivery.getActualDeliveryDate()
         );
 
         DelayScoreRecord record = new DelayScoreRecord();
         record.setPoId(poId);
         record.setSupplierId(po.getSupplierId());
-        record.setDelayDays((int) Math.max(delay, 0));
+        record.setDelayDays((int) Math.max(delayDays, 0));
 
-        if (delay <= 0) {
+        if (delayDays <= 0) {
             record.setDelaySeverity("ON_TIME");
             record.setScore(100.0);
-        } else if (delay <= 3) {
+        } else if (delayDays <= 3) {
             record.setDelaySeverity("MINOR");
             record.setScore(80.0);
         } else {

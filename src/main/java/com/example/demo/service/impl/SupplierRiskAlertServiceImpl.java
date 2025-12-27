@@ -2,8 +2,11 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
-import java.util.*;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class SupplierRiskAlertServiceImpl {
 
     private final SupplierRiskAlertRepository repo;
@@ -18,7 +21,8 @@ public class SupplierRiskAlertServiceImpl {
     }
 
     public SupplierRiskAlert resolveAlert(Long id) {
-        SupplierRiskAlert alert = repo.findById(id).orElseThrow();
+        SupplierRiskAlert alert = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Alert not found"));
         alert.setResolved(true);
         return repo.save(alert);
     }
