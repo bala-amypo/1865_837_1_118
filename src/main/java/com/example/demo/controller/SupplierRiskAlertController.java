@@ -1,34 +1,38 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.model.SupplierRiskAlert;
-// import com.example.demo.service.SupplierRiskAlertService;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.web.bind.annotation.*;
-// import java.util.List;
+import com.example.demo.model.SupplierRiskAlert;
+import com.example.demo.service.impl.SupplierRiskAlertServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
-// @RestController
-// @RequestMapping("/api/risk-alerts")
-// @RequiredArgsConstructor
-// public class SupplierRiskAlertController {
-//     private final SupplierRiskAlertService service;
+import java.util.List;
 
-//     @PostMapping
-//     public SupplierRiskAlert create(@RequestBody SupplierRiskAlert alert) {
-//         return service.createAlert(alert);
-//     }
+@RestController
+@RequestMapping("/api/alerts")
+public class RiskAlertController {
 
-//     @GetMapping("/supplier/{supplierId}")
-//     public List<SupplierRiskAlert> getBySupplier(@PathVariable Long supplierId) {
-//         return service.getAlertsBySupplier(supplierId);
-//     }
+    private final SupplierRiskAlertServiceImpl service;
 
-//     @PutMapping("/{id}/resolve")
-//     public SupplierRiskAlert resolve(@PathVariable Long id) {
-//         return service.resolveAlert(id);
-//     }
+    public RiskAlertController(SupplierRiskAlertServiceImpl service) {
+        this.service = service;
+    }
 
-//     @GetMapping
-//     public List<SupplierRiskAlert> getAll() {
-//         return service.getAllAlerts();
-//     }
-// }
+    @PostMapping
+    public SupplierRiskAlert create(@RequestBody SupplierRiskAlert alert) {
+        return service.createAlert(alert);
+    }
+
+    @PutMapping("/{id}/resolve")
+    public SupplierRiskAlert resolve(@PathVariable Long id) {
+        return service.resolveAlert(id);
+    }
+
+    @GetMapping("/supplier/{supplierId}")
+    public List<SupplierRiskAlert> bySupplier(@PathVariable Long supplierId) {
+        return service.getAlertsBySupplier(supplierId);
+    }
+
+    @GetMapping
+    public List<SupplierRiskAlert> all() {
+        return service.getAllAlerts();
+    }
+}

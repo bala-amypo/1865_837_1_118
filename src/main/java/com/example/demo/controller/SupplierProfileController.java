@@ -1,34 +1,41 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.model.SupplierProfile;
-// import com.example.demo.service.SupplierProfileService;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.web.bind.annotation.*;
-// import java.util.List;
+import com.example.demo.model.SupplierProfile;
+import com.example.demo.service.impl.SupplierProfileServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
-// @RestController
-// @RequestMapping("/api/suppliers")
-// @RequiredArgsConstructor
-// public class SupplierProfileController {
-//     private final SupplierProfileService service;
+import java.util.List;
 
-//     @PostMapping
-//     public SupplierProfile create(@RequestBody SupplierProfile s) {
-//         return service.createSupplier(s);
-//     }
+@RestController
+@RequestMapping("/api/suppliers")
+public class SupplierController {
 
-//     @GetMapping("/{id}")
-//     public SupplierProfile getById(@PathVariable Long id) {
-//         return service.getSupplierById(id);
-//     }
+    private final SupplierProfileServiceImpl service;
 
-//     @GetMapping
-//     public List<SupplierProfile> getAll() {
-//         return service.getAllSuppliers();
-//     }
+    public SupplierController(SupplierProfileServiceImpl service) {
+        this.service = service;
+    }
 
-//     @PutMapping("/{id}/status")
-//     public SupplierProfile updateStatus(@PathVariable Long id, @RequestParam boolean active) {
-//         return service.updateSupplierStatus(id, active);
-//     }
-// }
+    @PostMapping
+    public SupplierProfile create(@RequestBody SupplierProfile supplier) {
+        return service.createSupplier(supplier);
+    }
+
+    @GetMapping
+    public List<SupplierProfile> getAll() {
+        return service.getAllSuppliers();
+    }
+
+    @GetMapping("/{id}")
+    public SupplierProfile getById(@PathVariable Long id) {
+        return service.getSupplierById(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public SupplierProfile updateStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active
+    ) {
+        return service.updateSupplierStatus(id, active);
+    }
+}

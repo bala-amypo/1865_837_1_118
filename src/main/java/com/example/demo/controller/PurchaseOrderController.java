@@ -1,34 +1,38 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.model.PurchaseOrderRecord;
-// import com.example.demo.service.PurchaseOrderService;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.web.bind.annotation.*;
-// import java.util.List;
+import com.example.demo.model.PurchaseOrderRecord;
+import com.example.demo.service.impl.PurchaseOrderServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
-// @RestController
-// @RequestMapping("/api/purchase-orders")
-// @RequiredArgsConstructor
-// public class PurchaseOrderController {
-//     private final PurchaseOrderService service;
+import java.util.List;
 
-//     @PostMapping
-//     public PurchaseOrderRecord create(@RequestBody PurchaseOrderRecord po) {
-//         return service.createPurchaseOrder(po);
-//     }
+@RestController
+@RequestMapping("/api/purchase-orders")
+public class PurchaseOrderController {
 
-//     @GetMapping
-//     public List<PurchaseOrderRecord> getAll() {
-//         return service.getAllPurchaseOrders();
-//     }
+    private final PurchaseOrderServiceImpl service;
 
-//     @GetMapping("/{id}")
-//     public PurchaseOrderRecord getById(@PathVariable Long id) {
-//         return service.getPOById(id).orElseThrow(() -> new RuntimeException("PO Not found"));
-//     }
+    public PurchaseOrderController(PurchaseOrderServiceImpl service) {
+        this.service = service;
+    }
 
-//     @GetMapping("/supplier/{supplierId}")
-//     public List<PurchaseOrderRecord> getBySupplier(@PathVariable Long supplierId) {
-//         return service.getPOsBySupplier(supplierId);
-//     }
-// }
+    @PostMapping
+    public PurchaseOrderRecord create(@RequestBody PurchaseOrderRecord po) {
+        return service.createPurchaseOrder(po);
+    }
+
+    @GetMapping("/supplier/{supplierId}")
+    public List<PurchaseOrderRecord> bySupplier(@PathVariable Long supplierId) {
+        return service.getPOsBySupplier(supplierId);
+    }
+
+    @GetMapping("/{id}")
+    public PurchaseOrderRecord getById(@PathVariable Long id) {
+        return service.getPOById(id).orElse(null);
+    }
+
+    @GetMapping
+    public List<PurchaseOrderRecord> getAll() {
+        return service.getAllPurchaseOrders();
+    }
+}

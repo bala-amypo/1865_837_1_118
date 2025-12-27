@@ -1,29 +1,33 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.model.DeliveryRecord;
-// import com.example.demo.service.DeliveryRecordService;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.web.bind.annotation.*;
-// import java.util.List;
+import com.example.demo.model.DeliveryRecord;
+import com.example.demo.service.impl.DeliveryRecordServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
-// @RestController
-// @RequestMapping("/api/deliveries")
-// @RequiredArgsConstructor
-// public class DeliveryRecordController {
-//     private final DeliveryRecordService service;
+import java.util.List;
 
-//     @PostMapping
-//     public DeliveryRecord create(@RequestBody DeliveryRecord d) {
-//         return service.recordDelivery(d);
-//     }
+@RestController
+@RequestMapping("/api/deliveries")
+public class DeliveryController {
 
-//     @GetMapping("/po/{poId}")
-//     public List<DeliveryRecord> getByPO(@PathVariable Long poId) {
-//         return service.getDeliveriesByPO(poId);
-//     }
+    private final DeliveryRecordServiceImpl service;
 
-//     @GetMapping
-//     public List<DeliveryRecord> getAll() {
-//         return service.getAllDeliveries();
-//     }
-// }
+    public DeliveryController(DeliveryRecordServiceImpl service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public DeliveryRecord record(@RequestBody DeliveryRecord delivery) {
+        return service.recordDelivery(delivery);
+    }
+
+    @GetMapping("/po/{poId}")
+    public List<DeliveryRecord> byPo(@PathVariable Long poId) {
+        return service.getDeliveriesByPO(poId);
+    }
+
+    @GetMapping
+    public List<DeliveryRecord> all() {
+        return service.getAllDeliveries();
+    }
+}
