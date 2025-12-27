@@ -19,7 +19,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        supplier.setActive(true);
+        supplier.setActive(true);   // ✅ tests expect default active = true
         return supplierRepo.save(supplier);
     }
 
@@ -27,6 +27,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierProfile toggleStatus(Long id) {
         SupplierProfile supplier = supplierRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
+
         supplier.setActive(!supplier.getActive());
         return supplierRepo.save(supplier);
     }
