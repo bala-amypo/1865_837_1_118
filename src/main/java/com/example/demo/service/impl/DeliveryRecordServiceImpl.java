@@ -13,21 +13,26 @@ import java.util.List;
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     private final DeliveryRecordRepository deliveryRepository;
+    private final PurchaseOrderRecordRepository poRepository;
 
     public DeliveryRecordServiceImpl(
             DeliveryRecordRepository deliveryRepository,
             PurchaseOrderRecordRepository poRepository) {
         this.deliveryRepository = deliveryRepository;
+        this.poRepository = poRepository;
     }
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
         if (delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must be >= 0");
+            throw new BadRequestException("Negative quantity");
         }
 
-        // ❌ DO NOT validate PO existence (tests don't expect it)
+        if (!poRepository.findById(delivery.getPoId()).isPresent()) {
+            throw new BadRequestException("Invalid PO");
+        }
+
         return deliveryRepository.save(delivery);
     }
 
