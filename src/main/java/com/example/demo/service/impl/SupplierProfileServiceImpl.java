@@ -19,6 +19,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
+        // MUST return saved object
         return repository.save(supplier);
     }
 
@@ -35,11 +36,8 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
         SupplierProfile supplier = repository.findById(id).orElse(null);
-        if (supplier != null) {
-            supplier.setActive(active);
-            return repository.save(supplier);
-        }
-        return null;
+        supplier.setActive(active);
+        return repository.save(supplier);
     }
 
     @Override

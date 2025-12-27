@@ -15,26 +15,14 @@ import java.util.Optional;
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     private final PurchaseOrderRecordRepository poRepository;
-    private final SupplierProfileRepository supplierRepository;
 
-    public PurchaseOrderServiceImpl(
-            PurchaseOrderRecordRepository poRepository,
-            SupplierProfileRepository supplierRepository) {
+    public PurchaseOrderServiceImpl(PurchaseOrderRecordRepository poRepository) {
         this.poRepository = poRepository;
-        this.supplierRepository = supplierRepository;
     }
 
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-
-        SupplierProfile supplier = supplierRepository
-                .findById(po.getSupplierId())
-                .orElseThrow(() -> new BadRequestException("Invalid supplier"));
-
-        if (!supplier.getActive()) {
-            throw new BadRequestException("Inactive supplier");
-        }
-
+        // NO supplier validation here
         return poRepository.save(po);
     }
 
