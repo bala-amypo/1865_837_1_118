@@ -10,6 +10,7 @@ import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -23,19 +24,20 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
 
-    // 🔹 Constructor REQUIRED by tests (5 args)
+    // 🔹 REQUIRED BY TESTS (5 args) — DO NOT AUTOWIRE
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository scoreRepo,
             PurchaseOrderRecordRepository poRepo,
             DeliveryRecordRepository deliveryRepo,
             SupplierProfileRepository supplierRepo,
-            SupplierRiskAlertServiceImpl alertService // <-- REQUIRED by test
+            SupplierRiskAlertServiceImpl alertService
     ) {
         this(scoreRepo, poRepo, deliveryRepo, supplierRepo);
-        // alertService is NOT used, but required for test compatibility
+        // alertService intentionally unused (test compatibility)
     }
 
-    // 🔹 Constructor for Spring (4 args)
+    // 🔹 THIS IS THE CONSTRUCTOR SPRING MUST USE
+    @Autowired
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository scoreRepo,
             PurchaseOrderRecordRepository poRepo,
