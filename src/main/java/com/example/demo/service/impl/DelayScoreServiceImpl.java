@@ -9,32 +9,31 @@ import com.example.demo.repository.DelayScoreRecordRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
+import com.example.demo.service.DelayScoreService;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-public class DelayScoreServiceImpl {
+public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository scoreRepo;
     private final PurchaseOrderRecordRepository poRepo;
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
-    private final SupplierRiskAlertServiceImpl alertService;
 
     public DelayScoreServiceImpl(DelayScoreRecordRepository scoreRepo,
                                  PurchaseOrderRecordRepository poRepo,
                                  DeliveryRecordRepository deliveryRepo,
-                                 SupplierProfileRepository supplierRepo,
-                                 SupplierRiskAlertServiceImpl alertService) {
+                                 SupplierProfileRepository supplierRepo) {
         this.scoreRepo = scoreRepo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
         this.supplierRepo = supplierRepo;
-        this.alertService = alertService;
     }
 
+    @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
         PurchaseOrderRecord po = poRepo.findById(poId)
                 .orElseThrow(() -> new RuntimeException("PO not found"));
@@ -77,10 +76,12 @@ public class DelayScoreServiceImpl {
         return scoreRepo.save(record);
     }
 
+    @Override
     public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
         return scoreRepo.findBySupplierId(supplierId);
     }
 
+    @Override
     public List<DelayScoreRecord> getAllScores() {
         return scoreRepo.findAll();
     }
