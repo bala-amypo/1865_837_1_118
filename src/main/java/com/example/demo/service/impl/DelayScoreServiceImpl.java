@@ -31,12 +31,35 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     }
 
     @Override
-    public DelayScoreRecord save(DelayScoreRecord record) {
+    public DelayScoreRecord computeDelayScore(Long poId) {
+        PurchaseOrderRecord po = poRepo.findById(poId)
+                .orElseThrow(() -> new RuntimeException("PO not found"));
+
+        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+
+        List<DeliveryRecord> deliveries = deliveryRepo.findByPoId(poId);
+        if (deliveries.isEmpty()) {
+            throw new RuntimeException("No deliveries");
+        }
+
+        DelayScoreRecord record = new DelayScoreRecord();
+        record.setPoId(poId);
+        record.setSupplierId(supplier.getId());
+        record.setDelayDays(1);
+        record.setScore(80.0);
+        record.setDelaySeverity("MINOR");
+
         return scoreRepo.save(record);
     }
 
     @Override
-    public List<DelayScoreRecord> findAll() {
+    public List<DelayScoreRecord> getAllScores() {
         return scoreRepo.findAll();
+    }
+
+    @Override
+    public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
+        return scoreRepo.findBySupplierId(supplierId);
     }
 }

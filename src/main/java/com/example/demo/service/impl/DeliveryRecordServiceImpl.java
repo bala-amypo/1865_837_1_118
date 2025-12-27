@@ -25,20 +25,18 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-
-        if (delivery.getDeliveredQuantity() <= 0) {
-            throw new BadRequestException("Quantity must be positive");
-        }
-
-        PurchaseOrderRecord po = poRepo.findById(delivery.getPurchaseOrder().getId())
-                .orElseThrow(() -> new BadRequestException("Invalid PO id"));
-
-        delivery.setPurchaseOrder(po);
+        poRepo.findById(delivery.getPoId())
+                .orElseThrow(() -> new RuntimeException("Invalid PO"));
         return deliveryRepo.save(delivery);
     }
 
     @Override
-    public List<DeliveryRecord> getByPo(Long poId) {
-        return deliveryRepo.findByPurchaseOrderId(poId);
+    public List<DeliveryRecord> getAllDeliveries() {
+        return deliveryRepo.findAll();
+    }
+
+    @Override
+    public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
+        return deliveryRepo.findByPoId(poId);
     }
 }
