@@ -1,10 +1,16 @@
-// package com.example.demo.service;
-// import com.example.demo.model.SupplierRiskAlert;
-// import java.util.List;
+package com.example.demo.service;
 
-// public interface SupplierRiskAlertService {
-//     SupplierRiskAlert createAlert(SupplierRiskAlert alert);
-//     List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId);
-//     SupplierRiskAlert resolveAlert(Long alertId);
-//     List<SupplierRiskAlert> getAllAlerts();
-// }
+import com.example.demo.model.SupplierRiskAlert;
+
+import java.util.List;
+
+public interface SupplierRiskAlertService {
+
+    SupplierRiskAlert createAlert(SupplierRiskAlert alert);
+
+    SupplierRiskAlert resolveAlert(Long id);
+
+    List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId);
+
+    List<SupplierRiskAlert> getAllAlerts();
+}
