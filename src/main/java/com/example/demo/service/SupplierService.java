@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.SupplierProfile;
 import java.util.List;
+import java.util.Optional;
 
 public interface SupplierService {
 
@@ -9,7 +10,7 @@ public interface SupplierService {
 
     SupplierProfile toggleStatus(Long supplierId);
 
-    SupplierProfile findByCode(String supplierCode);
+    Optional<SupplierProfile> findByCode(String supplierCode);
 
     List<SupplierProfile> findAll();
 }

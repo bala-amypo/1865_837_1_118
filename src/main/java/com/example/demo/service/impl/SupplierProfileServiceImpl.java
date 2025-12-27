@@ -16,24 +16,26 @@ public class SupplierProfileServiceImpl {
         this.repository = repository;
     }
 
-    public SupplierProfile createSupplier(SupplierProfile supplier) {
-        supplier.setActive(true);
+    public SupplierProfile save(SupplierProfile supplier) {
         return repository.save(supplier);
-    }
-
-    public SupplierProfile toggleStatus(Long supplierId) {
-        SupplierProfile supplier = repository.findById(supplierId)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-
-        supplier.setActive(!supplier.isActive());
-        return repository.save(supplier);
-    }
-
-    public Optional<SupplierProfile> findByCode(String supplierCode) {
-        return repository.findBySupplierCode(supplierCode);
     }
 
     public List<SupplierProfile> findAll() {
         return repository.findAll();
+    }
+
+    public Optional<SupplierProfile> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    public Optional<SupplierProfile> findBySupplierCode(String code) {
+        return repository.findBySupplierCode(code);
+    }
+
+    public SupplierProfile toggleStatus(Long id) {
+        SupplierProfile supplier = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        supplier.setActive(!supplier.isActive());
+        return repository.save(supplier);
     }
 }
