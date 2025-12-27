@@ -3,7 +3,6 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "delay_scores")
 public class DelayScoreRecord {
 
     @Id
@@ -16,22 +15,47 @@ public class DelayScoreRecord {
     private Double score;
     private String delaySeverity;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ✅ REQUIRED BY TESTS
+    public Long getId() {
+        return id;
+    }
 
-    public Long getPoId() { return poId; }
-    public void setPoId(Long poId) { this.poId = poId; }
+    public Long getPoId() {
+        return poId;
+    }
 
-    public Long getSupplierId() { return supplierId; }
-    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
+    public void setPoId(Long poId) {
+        this.poId = poId;
+    }
 
-    public Integer getDelayDays() { return delayDays; }
-    public void setDelayDays(Integer delayDays) { this.delayDays = delayDays; }
+    public Long getSupplierId() {
+        return supplierId;
+    }
 
-    public Double getScore() { return score; }
-    public void setScore(Double score) { this.score = score; }
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
+    }
 
-    public String getDelaySeverity() { return delaySeverity; }
+    public Integer getDelayDays() {
+        return delayDays;
+    }
+
+    public void setDelayDays(Integer delayDays) {
+        this.delayDays = delayDays;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public String getDelaySeverity() {
+        return delaySeverity;
+    }
+
     public void setDelaySeverity(String delaySeverity) {
         this.delaySeverity = delaySeverity;
     }
