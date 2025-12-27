@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SupplierProfile;
-import com.example.demo.service.impl.SupplierProfileServiceImpl;
+import com.example.demo.service.SupplierService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,31 +10,29 @@ import java.util.List;
 @RequestMapping("/api/suppliers")
 public class SupplierProfileController {
 
-    private final SupplierProfileServiceImpl service;
+    private final SupplierService supplierService;
 
-    public SupplierProfileController(SupplierProfileServiceImpl service) {
-        this.service = service;
+    public SupplierProfileController(SupplierService supplierService) {
+        this.supplierService = supplierService;
     }
 
     @PostMapping
-    public SupplierProfile create(@RequestBody SupplierProfile supplier) {
-        return service.createSupplier(supplier);
+    public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
+        return supplierService.createSupplier(supplier);
+    }
+
+    @PutMapping("/{id}/toggle")
+    public SupplierProfile toggleSupplier(@PathVariable Long id) {
+        return supplierService.toggleStatus(id);
     }
 
     @GetMapping
-    public List<SupplierProfile> getAll() {
-        return service.getAllSuppliers();
+    public List<SupplierProfile> getAllSuppliers() {
+        return supplierService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public SupplierProfile getById(@PathVariable Long id) {
-        return service.getSupplierById(id);
-    }
-
-    @PutMapping("/{id}/status")
-    public SupplierProfile updateStatus(
-            @PathVariable Long id,
-            @RequestParam boolean active) {
-        return service.updateSupplierStatus(id, active);
+    @GetMapping("/code/{code}")
+    public SupplierProfile getByCode(@PathVariable String code) {
+        return supplierService.findByCode(code).orElse(null);
     }
 }
