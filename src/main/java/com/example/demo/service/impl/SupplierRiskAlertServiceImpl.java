@@ -18,17 +18,13 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        if (alert.getResolved() == null) {
-            alert.setResolved(false);
-        }
+        alert.setResolved(false);
         return repository.save(alert);
     }
 
     @Override
     public SupplierRiskAlert resolveAlert(Long id) {
-        SupplierRiskAlert alert = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Alert not found"));
-
+        SupplierRiskAlert alert = repository.findById(id).get();
         alert.setResolved(true);
         return repository.save(alert);
     }

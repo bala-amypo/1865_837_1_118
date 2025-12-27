@@ -19,9 +19,6 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if (supplier.getActive() == null) {
-            supplier.setActive(true);
-        }
         return repository.save(supplier);
     }
 
