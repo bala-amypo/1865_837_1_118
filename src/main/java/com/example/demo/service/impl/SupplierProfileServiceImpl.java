@@ -2,51 +2,38 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
-import com.example.demo.service.SupplierService;
-import com.example.demo.exception.BadRequestException;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class SupplierServiceImpl implements SupplierService {
+public class SupplierProfileServiceImpl {
 
-    private final SupplierProfileRepository supplierRepo;
+    private final SupplierProfileRepository repository;
 
-    public SupplierServiceImpl(SupplierProfileRepository supplierRepo) {
-        this.supplierRepo = supplierRepo;
+    public SupplierProfileServiceImpl(SupplierProfileRepository repository) {
+        this.repository = repository;
     }
 
-    // ---------------- CREATE SUPPLIER ----------------
-    @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if (supplier == null) {
-            throw new BadRequestException("Supplier cannot be null");
-        }
-        return supplierRepo.save(supplier);
+        supplier.setActive(true);
+        return repository.save(supplier);
     }
 
-    // ---------------- TOGGLE ACTIVE STATUS ----------------
-    @Override
     public SupplierProfile toggleStatus(Long supplierId) {
-        SupplierProfile supplier = supplierRepo.findById(supplierId)
-                .orElseThrow(() -> new BadRequestException("Supplier not found"));
+        SupplierProfile supplier = repository.findById(supplierId)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
         supplier.setActive(!supplier.isActive());
-        return supplierRepo.save(supplier);
+        return repository.save(supplier);
     }
 
-    // ---------------- FIND BY CODE ----------------
-    @Override
-    public SupplierProfile findByCode(String supplierCode) {
-        return supplierRepo.findBySupplierCode(supplierCode)
-                .orElseThrow(() -> new BadRequestException("Supplier not found"));
+    public Optional<SupplierProfile> findByCode(String supplierCode) {
+        return repository.findBySupplierCode(supplierCode);
     }
 
-    // ---------------- FIND ALL ----------------
-    @Override
     public List<SupplierProfile> findAll() {
-        return supplierRepo.findAll();
+        return repository.findAll();
     }
 }
