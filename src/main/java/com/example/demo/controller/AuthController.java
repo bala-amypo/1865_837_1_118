@@ -1,53 +1,43 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.dto.*;
-// import com.example.demo.exception.BadRequestException;
-// import com.example.demo.model.AppUser;
-// import com.example.demo.repository.AppUserRepository;
-// import com.example.demo.security.JwtTokenProvider;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.security.authentication.AuthenticationManager;
-// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.web.bind.annotation.*;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.model.AppUser;
+import com.example.demo.repository.AppUserRepository;
+import com.example.demo.security.JwtTokenProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.*;
 
-// import java.util.HashMap;
-// import java.util.Map;
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
 
-// @RestController
-// @RequestMapping("/auth")
-// @RequiredArgsConstructor
-// public class AuthController {
-//     private final AuthenticationManager authenticationManager;
-//     private final AppUserRepository userRepository;
-//     private final PasswordEncoder passwordEncoder;
-//     private final JwtTokenProvider tokenProvider;
+    private final AppUserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
-//     @PostMapping("/register")
-//     public ApiResponse register(@RequestBody RegisterRequest req) {
-//         if(userRepository.existsByUsername(req.getUsername())) {
-//             throw new BadRequestException("Username already taken");
-//         }
-//         AppUser user = new AppUser();
-//         user.setUsername(req.getUsername());
-//         user.setEmail(req.getEmail());
-//         user.setPassword(passwordEncoder.encode(req.getPassword()));
-//         user.setRole(req.getRole());
-//         userRepository.save(user);
-//         return new ApiResponse(true, "User registered", null);
-//     }
+    public AuthController(AppUserRepository userRepository,
+                          JwtTokenProvider jwtTokenProvider,
+                          AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
+    }
 
-//     @PostMapping("/login")
-//     public Map<String, String> login(@RequestBody LoginRequest req) {
-//         authenticationManager.authenticate(
-//                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
-        
-//         AppUser user = userRepository.findByUsername(req.getUsername())
-//                 .orElseThrow(() -> new RuntimeException("User not found"));
-        
-//         String token = tokenProvider.generateToken(user);
-//         Map<String, String> res = new HashMap<>();
-//         res.put("token", token);
-//         return res;
-//     }
-// }
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequest request) {
+        AppUser user = new AppUser();
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+        user.setEmail(request.getEmail());
+        user.setRole(request.getRole());
+
+        userRepository.save(user);
+        return jwtTokenProvider.generateToken(user);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest request) {
+        return "LOGIN_SUCCESS";
+    }
+}

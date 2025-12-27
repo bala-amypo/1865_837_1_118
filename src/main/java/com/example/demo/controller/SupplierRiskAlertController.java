@@ -8,11 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/alerts")
-public class RiskAlertController {
+public class SupplierRiskAlertController {
 
     private final SupplierRiskAlertServiceImpl service;
 
-    public RiskAlertController(SupplierRiskAlertServiceImpl service) {
+    public SupplierRiskAlertController(SupplierRiskAlertServiceImpl service) {
         this.service = service;
     }
 
@@ -26,13 +26,13 @@ public class RiskAlertController {
         return service.resolveAlert(id);
     }
 
+    @GetMapping
+    public List<SupplierRiskAlert> getAll() {
+        return service.getAllAlerts();
+    }
+
     @GetMapping("/supplier/{supplierId}")
     public List<SupplierRiskAlert> bySupplier(@PathVariable Long supplierId) {
         return service.getAlertsBySupplier(supplierId);
-    }
-
-    @GetMapping
-    public List<SupplierRiskAlert> all() {
-        return service.getAllAlerts();
     }
 }

@@ -8,11 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/suppliers")
-public class SupplierController {
+public class SupplierProfileController {
 
     private final SupplierProfileServiceImpl service;
 
-    public SupplierController(SupplierProfileServiceImpl service) {
+    public SupplierProfileController(SupplierProfileServiceImpl service) {
         this.service = service;
     }
 
@@ -34,8 +34,7 @@ public class SupplierController {
     @PutMapping("/{id}/status")
     public SupplierProfile updateStatus(
             @PathVariable Long id,
-            @RequestParam boolean active
-    ) {
+            @RequestParam boolean active) {
         return service.updateSupplierStatus(id, active);
     }
 }

@@ -21,13 +21,13 @@ public class DelayScoreController {
         return service.computeDelayScore(poId);
     }
 
+    @GetMapping
+    public List<DelayScoreRecord> getAll() {
+        return service.getAllScores();
+    }
+
     @GetMapping("/supplier/{supplierId}")
     public List<DelayScoreRecord> bySupplier(@PathVariable Long supplierId) {
         return service.getScoresBySupplier(supplierId);
-    }
-
-    @GetMapping
-    public List<DelayScoreRecord> all() {
-        return service.getAllScores();
     }
 }

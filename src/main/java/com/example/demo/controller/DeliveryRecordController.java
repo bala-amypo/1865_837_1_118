@@ -8,11 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveries")
-public class DeliveryController {
+public class DeliveryRecordController {
 
     private final DeliveryRecordServiceImpl service;
 
-    public DeliveryController(DeliveryRecordServiceImpl service) {
+    public DeliveryRecordController(DeliveryRecordServiceImpl service) {
         this.service = service;
     }
 
@@ -21,13 +21,13 @@ public class DeliveryController {
         return service.recordDelivery(delivery);
     }
 
+    @GetMapping
+    public List<DeliveryRecord> getAll() {
+        return service.getAllDeliveries();
+    }
+
     @GetMapping("/po/{poId}")
     public List<DeliveryRecord> byPo(@PathVariable Long poId) {
         return service.getDeliveriesByPO(poId);
-    }
-
-    @GetMapping
-    public List<DeliveryRecord> all() {
-        return service.getAllDeliveries();
     }
 }
