@@ -13,26 +13,16 @@ import java.util.List;
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     private final DeliveryRecordRepository deliveryRepository;
-    private final PurchaseOrderRecordRepository poRepository;
 
-    public DeliveryRecordServiceImpl(
-            DeliveryRecordRepository deliveryRepository,
-            PurchaseOrderRecordRepository poRepository) {
+    public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository) {
         this.deliveryRepository = deliveryRepository;
-        this.poRepository = poRepository;
     }
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-
         if (delivery.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Negative quantity");
         }
-
-        if (!poRepository.findById(delivery.getPoId()).isPresent()) {
-            throw new BadRequestException("Invalid PO");
-        }
-
         return deliveryRepository.save(delivery);
     }
 
