@@ -1,9 +1,16 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "purchase_orders")
 public class PurchaseOrderRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long supplierId;
     private Integer quantity;
     private String poNumber;
