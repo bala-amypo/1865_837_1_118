@@ -24,9 +24,12 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert resolveAlert(Long id) {
-        SupplierRiskAlert alert = repository.findById(id).get();
-        alert.setResolved(true);
-        return repository.save(alert);
+        SupplierRiskAlert alert = repository.findById(id).orElse(null);
+        if (alert != null) {
+            alert.setResolved(true);
+            return repository.save(alert);
+        }
+        return null;
     }
 
     @Override
