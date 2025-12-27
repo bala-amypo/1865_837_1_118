@@ -1,27 +1,32 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "purchase_order_records")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class PurchaseOrderRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
-    private String poNumber;
-    
     private Long supplierId;
-    private String itemDescription;
     private Integer quantity;
-    private LocalDate promisedDeliveryDate;
+    private String poNumber;
     private LocalDate issuedDate;
+    private LocalDate promisedDeliveryDate;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getSupplierId() { return supplierId; }
+    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public String getPoNumber() { return poNumber; }
+    public void setPoNumber(String poNumber) { this.poNumber = poNumber; }
+
+    public LocalDate getIssuedDate() { return issuedDate; }
+    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
+
+    public LocalDate getPromisedDeliveryDate() { return promisedDeliveryDate; }
+    public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate) {
+        this.promisedDeliveryDate = promisedDeliveryDate;
+    }
 }
