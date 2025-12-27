@@ -16,23 +16,27 @@ public class SupplierProfileController {
         this.supplierService = supplierService;
     }
 
+    // Create supplier
     @PostMapping
     public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
         return supplierService.createSupplier(supplier);
     }
 
+    // Toggle active status
     @PutMapping("/{id}/toggle")
-    public SupplierProfile toggleSupplier(@PathVariable Long id) {
+    public SupplierProfile toggleStatus(@PathVariable Long id) {
         return supplierService.toggleStatus(id);
     }
 
+    // Get all suppliers
     @GetMapping
     public List<SupplierProfile> getAllSuppliers() {
         return supplierService.findAll();
     }
 
+    // Get supplier by code (FIXED ❗)
     @GetMapping("/code/{code}")
     public SupplierProfile getByCode(@PathVariable String code) {
-        return supplierService.findByCode(code).orElse(null);
+        return supplierService.findByCode(code); // ✅ NO orElse
     }
 }
