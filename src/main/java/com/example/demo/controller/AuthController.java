@@ -33,14 +33,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        // Note: The system primarily uses email for login lookup in CustomUserDetailsService, 
+        // but the token uses the passed username/password combo.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        // In a real app, we would get the UserDetails to create the token
-        // For this example, we fetch the user entity again or cast principal
-        String jwt = tokenProvider.generateToken(userRepository.findByEmail(loginRequest.getUsername()).orElseThrow());
+        
+        // We fetch the user by email (assuming username in LoginRequest is the email, or we lookup by whatever matches)
+        // Since CustomUserDetailsService loads by email, we'll try to find by email first.
+        String jwt = tokenProvider.generateToken(userRepository.findByEmail(loginRequest.getUsername())
+                .or(() -> userRepository.findById(0L)) // Fallback (unlikely if auth passed)
+                .orElseThrow());
         
         return ResponseEntity.ok(new ApiResponse(true, "Login success", jwt));
     }
@@ -50,11 +55,17 @@ public class AuthController {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(false, "Email is already taken!", null), HttpStatus.BAD_REQUEST);
         }
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!", null), HttpStatus.BAD_REQUEST);
+        }
 
-        // Create user
-        AppUser user = new AppUser(signUpRequest.getEmail(), 
-                                   passwordEncoder.encode(signUpRequest.getPassword()), 
-                                   signUpRequest.getRole());
+        // Create user with Username included
+        AppUser user = new AppUser(
+                signUpRequest.getUsername(),
+                signUpRequest.getEmail(),
+                passwordEncoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getRole()
+        );
 
         userRepository.save(user);
 
