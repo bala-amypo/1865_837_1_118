@@ -1,0 +1,43 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.SupplierProfile;
+import com.example.demo.repository.SupplierProfileRepository;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class SupplierProfileServiceImpl {
+    private final SupplierProfileRepository repository;
+
+    public SupplierProfileServiceImpl(SupplierProfileRepository repository) {
+        this.repository = repository;
+    }
+
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        if(repository.findBySupplierCode(supplier.getSupplierCode()).isPresent()){
+            throw new IllegalArgumentException("Duplicate supplier code");
+        }
+        return repository.save(supplier);
+    }
+
+    public SupplierProfile getSupplierById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+    }
+
+    public Optional<SupplierProfile> getBySupplierCode(String code) {
+        return repository.findBySupplierCode(code);
+    }
+
+    public List<SupplierProfile> getAllSuppliers() {
+        return repository.findAll();
+    }
+
+    public SupplierProfile updateSupplierStatus(Long id, boolean active) {
+        SupplierProfile s = getSupplierById(id);
+        s.setActive(active);
+        return repository.save(s);
+    }
+}
