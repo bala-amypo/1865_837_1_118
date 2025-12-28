@@ -10,9 +10,13 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    // Secret and Validity usually from properties, hardcoded for safety in example
-    private final String jwtSecret = "MySuperSecretKeyForJwtSigningMustBeLongEnough123456"; 
-    private final long jwtExpirationInMs = 3600000;
+
+    // These annotations read the values from your application.properties
+    @Value("${app.jwtSecret}")
+    private String jwtSecret;
+
+    @Value("${app.jwtExpirationInMs}")
+    private long jwtExpirationInMs;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
