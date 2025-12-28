@@ -5,7 +5,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
-import com.example.demo.service.SupplierRiskAlertService;
+import com.example.demo.service.SupplierRiskAlertService; // Importing Interface
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -17,8 +17,9 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepo;
     private final DeliveryRecordRepository deliveryRepo;
     private final SupplierProfileRepository supplierRepo;
-    private final SupplierRiskAlertService alertService; // Inject Interface
+    private final SupplierRiskAlertService alertService;
 
+    // CRITICAL: The order of arguments here MUST match the Test file line 12.
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepo, 
                                  PurchaseOrderRecordRepository poRepo,
                                  DeliveryRecordRepository deliveryRepo,
