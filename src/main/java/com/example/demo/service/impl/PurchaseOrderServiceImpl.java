@@ -29,7 +29,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             throw new BadRequestException("must be active"); 
         }
         
-        [cite_start]// Rule: Quantity > 0 [cite: 346]
         if (po.getQuantity() == null || po.getQuantity() <= 0) {
             throw new BadRequestException("Quantity must be > 0");
         }

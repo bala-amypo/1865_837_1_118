@@ -18,7 +18,6 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        [cite_start]// Rule: Check duplicate code [cite: 322]
         if(repository.findBySupplierCode(supplier.getSupplierCode()).isPresent()){
             throw new IllegalArgumentException("Duplicate supplier code");
         }
@@ -27,7 +26,6 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        [cite_start]// Rule: Throw ResourceNotFoundException if missing [cite: 326]
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
