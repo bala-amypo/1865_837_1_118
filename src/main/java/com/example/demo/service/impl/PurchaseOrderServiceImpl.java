@@ -5,12 +5,13 @@ import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
+import com.example.demo.service.PurchaseOrderService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PurchaseOrderServiceImpl {
+public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     private final PurchaseOrderRecordRepository poRepository;
     private final SupplierProfileRepository supplierRepository;
 
@@ -19,27 +20,33 @@ public class PurchaseOrderServiceImpl {
         this.supplierRepository = supplierRepository;
     }
 
+    @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
         SupplierProfile s = supplierRepository.findById(po.getSupplierId())
-                .orElseThrow(() -> new BadRequestException("Invalid supplierId")); // [cite: 344]
+                .orElseThrow(() -> new BadRequestException("Invalid supplierId")); 
         
         if (!Boolean.TRUE.equals(s.getActive())) {
-            throw new BadRequestException("must be active"); // [cite: 345]
+            throw new BadRequestException("must be active"); 
         }
+        
+        [cite_start]// Rule: Quantity > 0 [cite: 346]
         if (po.getQuantity() == null || po.getQuantity() <= 0) {
             throw new BadRequestException("Quantity must be > 0");
         }
         return poRepository.save(po);
     }
 
+    @Override
     public List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId) {
         return poRepository.findBySupplierId(supplierId);
     }
 
+    @Override
     public Optional<PurchaseOrderRecord> getPOById(Long id) {
         return poRepository.findById(id);
     }
     
+    @Override
     public List<PurchaseOrderRecord> getAllPurchaseOrders() {
         return poRepository.findAll();
     }
