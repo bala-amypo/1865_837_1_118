@@ -11,7 +11,6 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    // These annotations read the values from your application.properties
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 

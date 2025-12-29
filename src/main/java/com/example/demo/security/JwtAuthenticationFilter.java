@@ -1,8 +1,5 @@
 package com.example.demo.security;
 
-// FIXED: Removed the wrong import line 'import com.example.demo.service.impl.CustomUserDetailsService;'
-// Since CustomUserDetailsService is in this same package, no import is needed.
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -19,7 +19,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final SupplierProfileRepository supplierRepo;
     private final SupplierRiskAlertService alertService;
 
-    // CRITICAL: The order of arguments here MUST match the Test file line 12.
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepo, 
                                  PurchaseOrderRecordRepository poRepo,
                                  DeliveryRecordRepository deliveryRepo,
