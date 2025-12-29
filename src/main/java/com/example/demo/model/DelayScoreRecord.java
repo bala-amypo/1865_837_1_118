@@ -1,39 +1,49 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "delay_score_records")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "delay_score_record")
 public class DelayScoreRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long supplierId;
-    
-    @Column(unique = true) // One score per PO [cite: 226]
     private Long poId;
-    
+    private Long supplierId;
     private Integer delayDays;
-    private String delaySeverity;
     private Double score;
-    private LocalDateTime computedAt;
+    private String delaySeverity;
 
-    public DelayScoreRecord(Long supplierId, Long poId, Integer delayDays, String delaySeverity, Double score) {
-        this.supplierId = supplierId;
+  
+    public DelayScoreRecord() {
+    }
+
+    public DelayScoreRecord(Long poId, Long supplierId, Integer delayDays,
+                            Double score, String delaySeverity) {
         this.poId = poId;
+        this.supplierId = supplierId;
         this.delayDays = delayDays;
-        this.delaySeverity = delaySeverity;
         this.score = score;
+        this.delaySeverity = delaySeverity;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.computedAt = LocalDateTime.now();
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getPoId() { return poId; }
+    public void setPoId(Long poId) { this.poId = poId; }
+
+    public Long getSupplierId() { return supplierId; }
+    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
+
+    public Integer getDelayDays() { return delayDays; }
+    public void setDelayDays(Integer delayDays) { this.delayDays = delayDays; }
+
+    public Double getScore() { return score; }
+    public void setScore(Double score) { this.score = score; }
+
+    public String getDelaySeverity() { return delaySeverity; }
+    public void setDelaySeverity(String delaySeverity) { this.delaySeverity = delaySeverity; }
 }
