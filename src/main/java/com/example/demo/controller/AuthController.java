@@ -1,19 +1,20 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.dto.ApiResponse;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -25,47 +26,67 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
 
-    public AuthController(AuthenticationManager authenticationManager, AppUserRepository userRepository,
-                          PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          AppUserRepository userRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
     }
 
+    // ✅ LOGIN
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
+
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(userRepository.findByEmail(loginRequest.getUsername())
-                .or(() -> userRepository.findById(0L))
-                .orElseThrow());
-        
-        return ResponseEntity.ok(new ApiResponse(true, "Login success", jwt));
+
+        AppUser user = (AppUser) authentication.getPrincipal();
+        String token = tokenProvider.generateToken(user);
+
+        return ResponseEntity.ok(
+                new ApiResponse(true, "Login successful", token)
+        );
     }
 
+    // ✅ REGISTER
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> registerUser(@RequestBody RegisterRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Email is already taken!", null), HttpStatus.BAD_REQUEST);
-        }
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!", null), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return new ResponseEntity<>(
+                    new ApiResponse(false, "Email already taken", null),
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
-        // Create user with Username included
+        if (userRepository.existsByUsername(request.getUsername())) {
+            return new ResponseEntity<>(
+                    new ApiResponse(false, "Username already taken", null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
         AppUser user = new AppUser(
-                signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getRole()
+                request.getUsername(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getRole()   // ✅ Role enum DIRECTLY
         );
 
         userRepository.save(user);
 
-        return new ResponseEntity<>(new ApiResponse(true, "User registered successfully", null), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                new ApiResponse(true, "User registered successfully", null),
+                HttpStatus.CREATED
+        );
     }
 }
