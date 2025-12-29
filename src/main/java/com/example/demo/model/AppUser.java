@@ -96,10 +96,11 @@ public class AppUser implements UserDetails {
 
     /* ================= UserDetails methods ================= */
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
-    }
+  @Override
+public Collection<? extends GrantedAuthority> getAuthorities() {
+    // The fix: We manually add "ROLE_" + the enum name
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+}
 
     @Override
     public boolean isAccountNonExpired() {
