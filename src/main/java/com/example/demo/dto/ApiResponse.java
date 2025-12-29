@@ -3,13 +3,14 @@ package com.example.demo.dto;
 public class ApiResponse {
 
     private String message;
-    private String token;
+    private Object data;
 
     public ApiResponse() {}
 
-    public ApiResponse(String message, String token) {
+    // ✅ THIS constructor fixes EVERYTHING
+    public ApiResponse(String message, Object data) {
         this.message = message;
-        this.token = token;
+        this.data = data;
     }
 
     public String getMessage() {
@@ -20,11 +21,11 @@ public class ApiResponse {
         this.message = message;
     }
 
-    public String getToken() {
-        return token;
+    public Object getData() {
+        return data;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setData(Object data) {
+        this.data = data;
     }
 }

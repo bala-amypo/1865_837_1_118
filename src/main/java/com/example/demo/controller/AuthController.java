@@ -60,14 +60,14 @@ public class AuthController {
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            return new ResponseEntity<>(
+            return new ResponseEntity<ApiResponse>(
                     new ApiResponse("Email already taken", null),
                     HttpStatus.BAD_REQUEST
             );
         }
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            return new ResponseEntity<>(
+            return new ResponseEntity<ApiResponse>(
                     new ApiResponse("Username already taken", null),
                     HttpStatus.BAD_REQUEST
             );
@@ -82,10 +82,9 @@ public class AuthController {
 
         userRepository.save(user);
 
-        return new ResponseEntity<>(
-                new ApiResponse(
-    "User registered successfully",
-    String.valueOf(request.getRole())
-));
+        return new ResponseEntity<ApiResponse>(
+                new ApiResponse("User registered successfully", request.getRole()),
+                HttpStatus.CREATED
+        );
     }
 }
