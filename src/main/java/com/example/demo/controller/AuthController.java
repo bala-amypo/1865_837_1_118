@@ -36,7 +36,6 @@ public class AuthController {
         this.tokenProvider = tokenProvider;
     }
 
-    // ✅ LOGIN
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
 
@@ -48,29 +47,27 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         AppUser user = (AppUser) authentication.getPrincipal();
         String token = tokenProvider.generateToken(user);
 
         return ResponseEntity.ok(
-                new ApiResponse(true, "Login successful", token)
+                new ApiResponse("Login successful", token)
         );
     }
 
-    // ✅ REGISTER
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             return new ResponseEntity<>(
-                    new ApiResponse(false, "Email already taken", null),
+                    new ApiResponse("Email already taken", null),
                     HttpStatus.BAD_REQUEST
             );
         }
 
         if (userRepository.existsByUsername(request.getUsername())) {
             return new ResponseEntity<>(
-                    new ApiResponse(false, "Username already taken", null),
+                    new ApiResponse("Username already taken", null),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -79,13 +76,14 @@ public class AuthController {
                 request.getUsername(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
-                request.getRole()   // ✅ Role enum DIRECTLY
+                request.getRole()
         );
 
         userRepository.save(user);
 
+        // ✅ ROLE NEVER SENT AS OBJECT
         return new ResponseEntity<>(
-                new ApiResponse(true, "User registered successfully", null),
+                new ApiResponse("User registered successfully", request.getRole().name()),
                 HttpStatus.CREATED
         );
     }

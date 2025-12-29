@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         String token = jwtTokenProvider.generateToken(user);
-        return new ApiResponse(true, "User registered successfully", request.getRole());
+        return new ApiResponse(true, "User registered successfully", token);
     }
 
     // ✅ LOGIN
@@ -68,6 +68,6 @@ public class AuthServiceImpl implements AuthService {
         AppUser user = (AppUser) authentication.getPrincipal();
         String token = jwtTokenProvider.generateToken(user);
 
-        return new ApiResponse("Login successful", token);
+        return new ApiResponse(true, "Login successful", token);
     }
 }
