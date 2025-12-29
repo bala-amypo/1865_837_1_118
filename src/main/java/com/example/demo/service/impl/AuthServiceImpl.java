@@ -49,8 +49,9 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-       return new ApiResponse("User registered successfully", request.getRole().name());
-
+        return new ApiResponse(
+                "User registered successfully",
+                request.getRole().name()
         );
     }
 

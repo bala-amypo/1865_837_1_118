@@ -47,6 +47,7 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         AppUser user = (AppUser) authentication.getPrincipal();
         String token = tokenProvider.generateToken(user);
 
@@ -81,9 +82,11 @@ public class AuthController {
 
         userRepository.save(user);
 
-        // ✅ ROLE NEVER SENT AS OBJECT
         return new ResponseEntity<>(
-        new ApiResponse("User registered successfully", request.getRole().name())
+                new ApiResponse(
+                        "User registered successfully",
+                        request.getRole().name()
+                ),
                 HttpStatus.CREATED
         );
     }
