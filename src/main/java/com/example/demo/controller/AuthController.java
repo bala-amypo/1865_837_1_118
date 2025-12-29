@@ -33,18 +33,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        // Note: The system primarily uses email for login lookup in CustomUserDetailsService, 
-        // but the token uses the passed username/password combo.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        // We fetch the user by email (assuming username in LoginRequest is the email, or we lookup by whatever matches)
-        // Since CustomUserDetailsService loads by email, we'll try to find by email first.
         String jwt = tokenProvider.generateToken(userRepository.findByEmail(loginRequest.getUsername())
-                .or(() -> userRepository.findById(0L)) // Fallback (unlikely if auth passed)
+                .or(() -> userRepository.findById(0L))
                 .orElseThrow());
         
         return ResponseEntity.ok(new ApiResponse(true, "Login success", jwt));

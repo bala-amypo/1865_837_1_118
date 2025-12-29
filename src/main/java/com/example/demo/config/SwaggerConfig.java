@@ -18,7 +18,6 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                // FIX: Add this line to force relative paths (solves HTTP vs HTTPS issue)
                 .servers(List.of(new Server().url("/"))) 
                 .info(new Info()
                         .title("Supply Chain Weak Link Analyzer API")
