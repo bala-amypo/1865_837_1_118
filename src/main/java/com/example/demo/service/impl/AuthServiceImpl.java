@@ -30,7 +30,6 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    // ✅ REGISTER
     @Override
     public ApiResponse register(RegisterRequest request) {
 
@@ -46,15 +45,15 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());   // ✅ Role enum directly
+        user.setRole(request.getRole());
 
         userRepository.save(user);
 
-        String token = jwtTokenProvider.generateToken(user);
-        return new ApiResponse(true, "User registered successfully", token);
+       return new ApiResponse("User registered successfully", request.getRole().name());
+
+        );
     }
 
-    // ✅ LOGIN
     @Override
     public ApiResponse login(LoginRequest request) {
 
@@ -68,6 +67,6 @@ public class AuthServiceImpl implements AuthService {
         AppUser user = (AppUser) authentication.getPrincipal();
         String token = jwtTokenProvider.generateToken(user);
 
-        return new ApiResponse(true, "Login successful", token);
+        return new ApiResponse("Login successful", token);
     }
 }

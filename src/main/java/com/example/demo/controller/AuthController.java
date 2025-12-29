@@ -83,7 +83,7 @@ public class AuthController {
 
         // ✅ ROLE NEVER SENT AS OBJECT
         return new ResponseEntity<>(
-                new ApiResponse("User registered successfully", request.getRole().name()),
+        new ApiResponse("User registered successfully", request.getRole().name())
                 HttpStatus.CREATED
         );
     }
