@@ -30,11 +30,20 @@ public class AppUser implements UserDetails {
 
     public AppUser() {}
 
+    // Original Constructor (Accepts String - Used by your Controller)
     public AppUser(String username, String email, String password, String role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    // NEW OVERLOADED Constructor (Accepts Role - Used by Tests)
+    public AppUser(String username, String email, String password, Role role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role.toString();
     }
 
     public Long getId() {
@@ -75,8 +84,14 @@ public class AppUser implements UserDetails {
         return role;
     }
 
+    // Original Setter (Accepts String)
     public void setRole(String role) {
         this.role = role;
+    }
+
+    // NEW OVERLOADED Setter (Accepts Role - Used by Tests)
+    public void setRole(Role role) {
+        this.role = role.toString();
     }
 
     /* ================= UserDetails methods ================= */
