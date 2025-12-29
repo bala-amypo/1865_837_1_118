@@ -1,14 +1,22 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ApiResponse {
-    private boolean success;
     private String message;
-    private Object data;
+    private String token;
+
+    // No-arg constructor
+    public ApiResponse() {}
+
+    // Constructor with parameters
+    public ApiResponse(String message, String token) {
+        this.message = message;
+        this.token = token;
+    }
+
+    // Getters and setters
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 }
