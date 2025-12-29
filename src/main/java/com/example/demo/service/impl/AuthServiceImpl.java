@@ -49,9 +49,10 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
+        // ERROR FIX: Added .toString() to request.getRole()
         return new ApiResponse(
                 "User registered successfully",
-                request.getRole()
+                request.getRole().toString()
         );
     }
 
