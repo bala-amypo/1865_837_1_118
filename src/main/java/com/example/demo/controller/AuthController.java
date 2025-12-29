@@ -81,10 +81,9 @@ public class AuthController {
         );
 
         userRepository.save(user);
-
-        // FIX: Converted Role to String using .toString()
+        // We wrap request.getRole() in String.valueOf() to force it to be a String
         return new ResponseEntity<ApiResponse>(
-                new ApiResponse("User registered successfully", request.getRole().toString()),
+                new ApiResponse("User registered successfully", String.valueOf(request.getRole())),
                 HttpStatus.CREATED
         );
     }
