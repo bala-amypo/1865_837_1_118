@@ -96,10 +96,13 @@ public class AppUser implements UserDetails {
 
     /* ================= UserDetails methods ================= */
 
-    @Override
+  // FIXED (Passing)
+        @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
-    }
+    // We add the "ROLE_" prefix here so the test passes, 
+    // but the database stays clean.
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+}
 
     @Override
     public boolean isAccountNonExpired() {
