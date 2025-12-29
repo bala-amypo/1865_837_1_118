@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SupplierProfileService {
-    SupplierProfile createSupplier(SupplierProfile supplier);
     SupplierProfile getSupplierById(Long id);
-    Optional<SupplierProfile> getBySupplierCode(String supplierCode);
+    SupplierProfile createSupplier(SupplierProfile supplier);
     List<SupplierProfile> getAllSuppliers();
-    SupplierProfile updateSupplierStatus(Long id, boolean active);
+    SupplierProfile updateSupplierStatus(Long id, Boolean active);
+    Optional<SupplierProfile> getBySupplierCode(String supplierCode);
 }
