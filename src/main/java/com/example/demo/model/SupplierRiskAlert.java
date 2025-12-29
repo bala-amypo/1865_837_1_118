@@ -15,11 +15,11 @@ public class SupplierRiskAlert {
     private Long id;
 
     private Long supplierId;
-    private String alertLevel; // LOW, MEDIUM, HIGH
+    private String alertLevel; 
     private String message;
     private LocalDateTime alertDate;
     
-    private Boolean resolved = false; // Default false [cite: 239]
+    private Boolean resolved = false;
 
     public SupplierRiskAlert(Long supplierId, String alertLevel, String message) {
         this.supplierId = supplierId;

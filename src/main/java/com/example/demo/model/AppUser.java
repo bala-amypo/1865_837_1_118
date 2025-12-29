@@ -14,7 +14,6 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Added this field to satisfy the Test Suite
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -28,7 +27,6 @@ public class AppUser {
 
     private LocalDateTime createdAt;
 
-    // Updated constructor to include username
     public AppUser(String username, String email, String password, String role) {
         this.username = username;
         this.email = email;

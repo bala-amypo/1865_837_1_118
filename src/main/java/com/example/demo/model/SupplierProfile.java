@@ -21,7 +21,7 @@ public class SupplierProfile {
     private String email;
     private String phone;
     
-    private Boolean active = true; // Default true [cite: 169]
+    private Boolean active = true; 
 
     private LocalDateTime createdAt;
 
