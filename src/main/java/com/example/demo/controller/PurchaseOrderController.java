@@ -1,38 +1,36 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.PurchaseOrderRecord;
-import com.example.demo.service.impl.PurchaseOrderServiceImpl;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.service.PurchaseOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/purchase-orders")
-@Tag(name = "Purchase Orders")
 public class PurchaseOrderController {
-    private final PurchaseOrderServiceImpl service;
 
-    public PurchaseOrderController(PurchaseOrderServiceImpl service) {
-        this.service = service;
-    }
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
 
     @PostMapping
-    public PurchaseOrderRecord create(@RequestBody PurchaseOrderRecord po) {
-        return service.createPurchaseOrder(po);
-    }
-
-    @GetMapping
-    public List<PurchaseOrderRecord> getAll() {
-        return service.getAllPurchaseOrders();
+    public ResponseEntity<PurchaseOrderRecord> createPO(@RequestBody PurchaseOrderRecord po) {
+        PurchaseOrderRecord created = purchaseOrderService.createPurchaseOrder(po);
+        return ResponseEntity.ok(created);
     }
 
     @GetMapping("/{id}")
-    public PurchaseOrderRecord getById(@PathVariable Long id) {
-        return service.getPOById(id).orElseThrow(() -> new RuntimeException("PO not found"));
+    public ResponseEntity<PurchaseOrderRecord> getPO(@PathVariable Long id) {
+        Optional<PurchaseOrderRecord> po = purchaseOrderService.getPOById(id);
+        return po.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/supplier/{supplierId}")
-    public List<PurchaseOrderRecord> getBySupplier(@PathVariable Long supplierId) {
-        return service.getPOsBySupplier(supplierId);
+    public ResponseEntity<List<PurchaseOrderRecord>> getPOsBySupplier(@PathVariable Long supplierId) {
+        List<PurchaseOrderRecord> pos = purchaseOrderService.getPOsBySupplier(supplierId);
+        return ResponseEntity.ok(pos);
     }
 }
