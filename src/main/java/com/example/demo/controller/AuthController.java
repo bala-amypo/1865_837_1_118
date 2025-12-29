@@ -82,9 +82,10 @@ public class AuthController {
 
         userRepository.save(user);
 
-        // ERROR FIX: Added .toString() to request.getRole()
+        // FIX: Converted Role to String using .toString()
         return new ResponseEntity<ApiResponse>(
                 new ApiResponse("User registered successfully", request.getRole().toString()),
                 HttpStatus.CREATED
         );
     }
+}
