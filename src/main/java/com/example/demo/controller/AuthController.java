@@ -84,10 +84,8 @@ public class AuthController {
 
         return new ResponseEntity<>(
                 new ApiResponse(
-                        "User registered successfully",
-                        request.getRole().name()
-                ),
-                HttpStatus.CREATED
-        );
+    "User registered successfully",
+    String.valueOf(request.getRole())
+));
     }
 }
