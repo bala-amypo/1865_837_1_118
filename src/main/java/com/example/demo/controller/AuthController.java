@@ -77,8 +77,7 @@ public class AuthController {
                 request.getUsername(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
-                request.getRole()
-        );
+                request.getRole().toString()        );
 
         userRepository.save(user);
         // We wrap request.getRole() in String.valueOf() to force it to be a String

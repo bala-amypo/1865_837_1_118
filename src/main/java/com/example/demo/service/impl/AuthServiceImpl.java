@@ -45,8 +45,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
-
+        user.setRole(request.getRole().toString());
         userRepository.save(user);
 
       // We wrap request.getRole() in String.valueOf() to force it to be a String
